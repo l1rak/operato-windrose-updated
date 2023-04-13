@@ -1,11 +1,13 @@
-import React from 'react';
-import { PanelProps, PanelData } from '@grafana/data';
-import { WindroseOptions } from 'types';
+import React, {useState} from 'react';
+import { PanelProps } from '@grafana/data';
+import { SpeedBucketStyle, WindroseOptions } from 'types';
 import { css, cx } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
-import { PetalBucket, SpeedBucket, WindData, Windrose, WindroseData } from './Windrose';
+import { Windrose } from './Windrose';
+import {createColorMap, highlightColor} from '../utils/colorUtils'
+import { calculateWindroseData, extractData } from 'utils/dataUtils';
 
-interface WindrosePanelProps extends PanelProps<WindroseOptions> {}
+interface WindrosePanelProps extends PanelProps<WindroseOptions> { }
 
 const getStyles = () => {
   return {
@@ -30,89 +32,38 @@ const getStyles = () => {
   };
 };
 
-function extractData(data: PanelData) {
-  let weatherData = data.series[0];
-
-  let speed: number[] = [];
-  let direction: number[] = [];
-
-  for (let i = 0; i < weatherData.fields[0].values.length; i++) {
-    for (let j = 0; j < weatherData.fields.length; j++) {
-      let field = weatherData.fields[j];
-      if (field.name === 'wind_speed') { speed.push(field.values.get(i)); }
-      if (field.name === 'wind_direction') { direction.push(field.values.get(i)); }
-    }
-  }
-
-  const windDataFrame: { direction: number[], speed: number[] } = {
-    direction: direction,
-    speed: speed
-  }
-  return windDataFrame;
-}
-
-function calculateSpeedBuckets(speedBucketSize: number, speedBucketCount: number, speedData: number[]): SpeedBucket[] {
-  let buckets = new Array<SpeedBucket>(0);
-  for(let i = 1; i <= speedBucketCount; i++) { 
-    buckets.push({index: i, speedUpperBound: speedBucketSize*(i), size: 0}); 
-  }
-
-  return buckets;
-}
-
-function calculateWindroseData(windData: WindData, bucketsPer90Deg: number, speedBucketCount: number, speedBucketSize: number): WindroseData {
-  /*bucketsPer90Deg = 2
-  windData = {
-    speed: [316, 360, 0, 44, 46, 90, 134, 136, 180, 224, 226, 270, 314],
-    direction: [316, 360, 0, 44, 46, 90, 134, 136, 180, 224, 226, 270, 314]
-  }
-  windData = {
-    speed: [],
-    direction: []
-  }
-  for(let d = 0; d < 359; d++){
-    windData.speed.push(d);
-    windData.direction.push(d);
-  }*/
-
-  // Global bounds inital values
-  let totalBucketsCount = bucketsPer90Deg*4;
-  let globalBound = -Infinity;
-
-  // Bucket array instantiation
-  let buckets = new Array(totalBucketsCount);
-  for(let i = 0; i < buckets.length; i++) { buckets[i] = []; }
-
-  // Bucket filling
-  let bucketSize = 360/(totalBucketsCount);
-  for(let i = 0; i < windData.direction.length; i++){
-    let speed = windData.speed[i];
-    let direction = windData.direction[i];
-    globalBound = Math.max(globalBound, direction);
-    let idx = Math.floor(((direction+bucketSize/2)%360)/(bucketSize))
-    buckets[idx].push(speed)
-  }
-
-  console.log("Size: "+speedBucketSize)
-  console.log("Count: "+speedBucketCount)
-  let windroseData = {petalBuckets: new Array<PetalBucket>(0)}
-  for(let i = 0; i < buckets.length; i++){
-    let speedBuckets = calculateSpeedBuckets(speedBucketSize, speedBucketCount, buckets[i]);
-    windroseData.petalBuckets.push({speedBuckets: speedBuckets});
-  }
-
-  return windroseData;
-}
-
 export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, width, height }) => {
   const styles = useStyles2(getStyles);
 
+  let colorCheckpoints = [
+    "#193e61", "#5c0615"
+  ]
+  let colorBar = createColorMap(colorCheckpoints, options.speedBucketsCount);
+
+
+  let constructingSpeedBucketStyles = Array<SpeedBucketStyle>(options.speedBucketsCount);
+  for (let i = 0; i < constructingSpeedBucketStyles.length; i++) {
+    let highlightedColor = highlightColor(colorBar[i], 3);
+    let idleBucketStyle = {
+      color: colorBar[i],
+      opacity: 1
+    }
+    let selectedBucketStyle = {
+      color: highlightedColor,
+      opacity: 1
+    }
+    constructingSpeedBucketStyles[i] = {
+      idleBucketStyle: idleBucketStyle,
+      selectedBucketStyle: selectedBucketStyle,
+      currentBucketStyle: idleBucketStyle      
+    };    
+  }
+  const [bucketStyles, setBucketStyles] = useState(constructingSpeedBucketStyles);
+
   let windData = calculateWindroseData(extractData(data), options.petalsPer90Deg, options.speedBucketsCount, options.speedBucketsSize)
 
-  console.log(windData)
-
-  const windroseRadius = Math.min(height, width)/2-64;
-  const windroseCenter = { x: width/2, y: height/2 }
+  const windroseRadius = Math.min(height, width) / 2 - 64;
+  const windroseCenter = { x: width / 2, y: height / 2 }
 
   return (
     <div
@@ -124,7 +75,11 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
         `
       )}
     >
-      <Windrose width={width} height={height} data={windData} radius={windroseRadius} center={windroseCenter} bucketsCount={options.petalsPer90Deg} />
+      <Windrose 
+        width={width} height={height} radius={windroseRadius} center={windroseCenter} 
+          data={windData} bucketsCount={options.petalsPer90Deg} 
+          styles={bucketStyles} changeStyle={setBucketStyles}/>
+
     </div>
   );
 };
