@@ -59,7 +59,8 @@ export function hexToRgb(hex: string, result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f
 export function highlightColor(color: string, percentHighlight: number){
     let [r,g,b] = hexToRgb(color);
     let [h,s,v] = rgbToHsv(r,g,b);
-    v = Math.max(0, Math.min(1, v*(1+percentHighlight)))
+    v = Math.max(0, Math.min(1, v*(1+percentHighlight/2)))
+    s = Math.max(0, Math.min(1, s*(1+percentHighlight)))
     let [_r,_g,_b] = hsvToRgb(h,s,v);
     return rgbToHex(
         clamp255(Math.floor(_r)),
@@ -80,12 +81,16 @@ export function createColorMap(colorCheckpointHexes: string[], numberOfBuckets: 
     colorCheckpointHexes.forEach((hexValue) =>{ colorCheckpoints.push(hexToRgb(hexValue)); })
     let lerpedColorHashes = new Array<string>(0);
     
-    for(let i = 0; i < numberOfBuckets; i++){
+    let checkpointCount = colorCheckpointHexes.length;
+    let t_diff = 1/(checkpointCount-1)
+    for(let i = 0; i < numberOfBuckets-1; i++){
         let t = i/(numberOfBuckets-1);
-        let idx1 = 0;
-        let idx2 = 1;
-        let lerpedColor = colorLerp(colorCheckpoints[idx1], colorCheckpoints[idx2], t);
+        let idx1 = Math.floor(t/t_diff);
+        let idx2 = Math.min(idx1+1, (checkpointCount-1));
+        let t1 = (t%t_diff)/t_diff;
+        let lerpedColor = colorLerp(colorCheckpoints[idx1], colorCheckpoints[idx2], t1);
         lerpedColorHashes.push(rgbToHex(lerpedColor[0],lerpedColor[1],lerpedColor[2]));
     }
+    lerpedColorHashes.push(colorCheckpointHexes[colorCheckpointHexes.length-1])
     return lerpedColorHashes;
 }

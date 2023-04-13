@@ -7,6 +7,7 @@ export interface SimpleOptions {
 }
 
 export interface WindroseOptions {
+  tooltipDecimalPlaces: number;
   petalsPer90Deg: number;
   overwriteSpeedBucketBounds: boolean;
   speedBucketsCount: number;
@@ -67,4 +68,5 @@ export type WindroseProps = {
   bucketsCount: number;
   styles: SpeedBucketStyle[];
   changeStyle: React.Dispatch<React.SetStateAction<SpeedBucketStyle[]>>;
+  tooltipDecimalPlaces: number;
 };

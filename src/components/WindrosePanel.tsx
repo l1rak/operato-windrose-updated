@@ -36,14 +36,15 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
   const styles = useStyles2(getStyles);
 
   let colorCheckpoints = [
-    "#193e61", "#5c0615"
+    "#3844f2", "#44f2a7", "#ecf238", "#f23838"
   ]
+  
   let colorBar = createColorMap(colorCheckpoints, options.speedBucketsCount);
 
 
   let constructingSpeedBucketStyles = Array<SpeedBucketStyle>(options.speedBucketsCount);
   for (let i = 0; i < constructingSpeedBucketStyles.length; i++) {
-    let highlightedColor = highlightColor(colorBar[i], 3);
+    let highlightedColor = highlightColor(colorBar[i], .25);
     let idleBucketStyle = {
       color: colorBar[i],
       opacity: 1
@@ -78,7 +79,7 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
       <Windrose 
         width={width} height={height} radius={windroseRadius} center={windroseCenter} 
           data={windData} bucketsCount={options.petalsPer90Deg} 
-          styles={bucketStyles} changeStyle={setBucketStyles}/>
+          styles={bucketStyles} changeStyle={setBucketStyles} tooltipDecimalPlaces={options.tooltipDecimalPlaces}/>
 
     </div>
   );

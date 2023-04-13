@@ -26,7 +26,7 @@ function onMouseLeave(event: React.MouseEvent<SVGPolygonElement, MouseEvent>, ch
   //target.setAttribute("stroke-width", "0")
 }
 
-export const Windrose = ({ data, width, height, center, radius, bucketsCount, styles, changeStyle }: WindroseProps) => {
+export const Windrose = ({ data, width, height, center, radius, bucketsCount, styles, changeStyle, tooltipDecimalPlaces }: WindroseProps) => {
 
   let ringRadius = 25;
 
@@ -48,10 +48,11 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
 
   let currentRingRadius = .1 * radius;
   for (let i = 1; i <= ringNumber; i++) {
-    //let ratio = .1 + (.9 * i / (ringNumber + 1));
     currentRingRadius += ringRadius;
     circlesRings.push(<circle cx={center.x} cy={center.y} r={currentRingRadius} strokeDasharray="5,5" fill="transparent" stroke='#222222' strokeWidth='1' />);
   }
+
+  tooltipDecimalPlaces = Math.max(0, Math.round(tooltipDecimalPlaces))
 
   let cakeSlices: JSX.Element[] = [];
   let normalizedRadius = radius * 0.9;
@@ -69,7 +70,7 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
 
       let polypointString = constructCakeSlice(centerAngle, angleDiff - oneDegreeInRad, center, startRadius - .05, endRadius + .05);
       cakeSlices.push(
-        <Tooltip content={Math.round(speedBucket.totalRelativeSize*100)+"%"}>
+        <Tooltip content={Math.round(speedBucket.totalRelativeSize*100*Math.pow(10, tooltipDecimalPlaces))/Math.pow(10, tooltipDecimalPlaces)+"%"}>
           <polygon className={speedBucket.index.toString()} 
           onMouseEnter={(event)=>{onMouseEnter(event, changeStyle, index)}} onMouseLeave={(event)=>{onMouseLeave(event, changeStyle, index)}} 
           points={polypointString} 
@@ -77,8 +78,16 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
         </Tooltip>
       );
     });
-
   }
+
+  let percentLabels: JSX.Element[] = [];
+  
+  let angle = angleDiff*2+angleDiff/2-90*deg2rad;
+  for (let i = 1; i <= ringNumber; i+=2) {
+    let x = center.x + Math.cos(angle)*(i/ringNumber)*radius;
+    let y = center.y + Math.sin(angle)*(i/ringNumber)*radius;
+    percentLabels.push(<text x={x} y={y} style={{pointerEvents: 'none'}}>{i+"%"}</text>);
+  }  
 
   return (
     <div>
@@ -100,7 +109,7 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
               {cakeSlices}
             </Svg>
             <Svg>
-              
+              {percentLabels}
             </Svg>
           </Svg>
         </svg>

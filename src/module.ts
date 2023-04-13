@@ -62,6 +62,13 @@ export const plugin = new PanelPlugin<WindroseOptions>(WindrosePanel).setPanelOp
       defaultValue: 2,
       showIf: (config) => config.overwriteSpeedBucketBounds
     })
+    .addNumberInput({
+      path: 'tooltipDecimalPlaces',
+      name: 'Tooltip decimal places.',
+      description: '-- SOON --.',
+      defaultValue: 1,
+      showIf: (config) => config.overwriteSpeedBucketBounds
+    })
     .addStringArray({
       path: 'speedBucketSizeOverwrites',
       name: 'Speed bucket overwrite',
