@@ -2,7 +2,7 @@ version: '3.0'
 
 services:
   grafana:
-    container_name: 'operato-operatowindrose-panel'
+    container_name: 'operato-windrose-panel'
     build:
       context: ./.config
       args:
@@ -10,5 +10,5 @@ services:
     ports:
       - 3000:3000/tcp
     volumes:
-      - ./dist:/var/lib/grafana/plugins/operato-operatowindrose-panel
+      - ./dist:/var/lib/grafana/plugins/operato-windrose-panel
       - ./provisioning:/etc/grafana/provisioning

@@ -12,6 +12,8 @@ export interface WindroseOptions {
   overwriteSpeedBucketBounds: boolean;
   speedBucketsCount: number;
   speedBucketsSize: number;
+  windroseLabels: string;
+  cardinalLabels: string;
 }
 
 export interface SpeedBucketStyleValues {
@@ -59,6 +61,22 @@ export type WindData = {
   direction: number[];
 }
 
+export type SvgLabelCSS = {
+  fill: string;
+  font: string;
+}
+
+export type SvgLabelStyle = {
+  css: SvgLabelCSS;
+  radiusOffset: number;
+}
+
+export type DirectionLabel = {
+  angle: number;
+  text: string;
+  style: SvgLabelStyle;
+}
+
 export type WindroseProps = {
   data: WindroseData;
   width: number;
@@ -67,6 +85,14 @@ export type WindroseProps = {
   center: Vector2;
   bucketsCount: number;
   styles: SpeedBucketStyle[];
+  directionLinesCount: number;
   changeStyle: React.Dispatch<React.SetStateAction<SpeedBucketStyle[]>>;
   tooltipDecimalPlaces: number;
+  directionLabels: DirectionLabel[]
 };
+
+export type WindroseLegendProps = {
+  bucketsSize: number;
+  bucketColors: string[];  
+  changeStyle: React.Dispatch<React.SetStateAction<SpeedBucketStyle[]>>;
+}

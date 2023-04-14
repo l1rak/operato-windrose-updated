@@ -1,44 +1,18 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { PanelProps } from '@grafana/data';
-import { SpeedBucketStyle, WindroseOptions } from 'types';
-import { css, cx } from '@emotion/css';
-import { useStyles2 } from '@grafana/ui';
+import { DirectionLabel, SpeedBucketStyle, WindroseOptions } from 'types';
 import { Windrose } from './Windrose';
-import {createColorMap, highlightColor} from '../utils/colorUtils'
+import { createColorMap, highlightColor } from '../utils/colorUtils'
 import { calculateWindroseData, extractData } from 'utils/dataUtils';
+import { WindroseLegend } from './WindroseLegend';
 
 interface WindrosePanelProps extends PanelProps<WindroseOptions> { }
 
-const getStyles = () => {
-  return {
-    wrapper: css`
-      font-family: Open Sans;
-      position: relative;
-    `,
-    svg: css`
-      position: absolute;
-      top: 0;
-      left: 0;
-    `,
-    textBox: css`
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      padding: 10px;
-    `,
-    windrose__background: css`
-      color: white;
-    `,
-  };
-};
-
 export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, width, height }) => {
-  const styles = useStyles2(getStyles);
-
   let colorCheckpoints = [
     "#3844f2", "#44f2a7", "#ecf238", "#f23838"
   ]
-  
+
   let colorBar = createColorMap(colorCheckpoints, options.speedBucketsCount);
 
 
@@ -56,31 +30,71 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
     constructingSpeedBucketStyles[i] = {
       idleBucketStyle: idleBucketStyle,
       selectedBucketStyle: selectedBucketStyle,
-      currentBucketStyle: idleBucketStyle      
-    };    
+      currentBucketStyle: idleBucketStyle
+    };
   }
   const [bucketStyles, setBucketStyles] = useState(constructingSpeedBucketStyles);
 
   let windData = calculateWindroseData(extractData(data), options.petalsPer90Deg, options.speedBucketsCount, options.speedBucketsSize)
 
-  const windroseRadius = Math.min(height, width) / 2 - 64;
-  const windroseCenter = { x: width / 2, y: height / 2 }
+  let padding = 32;
+
+  const windroseRadius = Math.min(height, width) / 2 - padding;
+  const windroseCenter = { x: windroseRadius + padding, y: height / 2 }
+
+  let directionLabels: DirectionLabel[] = [];
+  let directionLinesCount = Math.max(0, options.petalsPer90Deg)
+
+  if (options.windroseLabels === "compass") {
+    const cardinalLabelStyle = { css: { font: "bold 20px sans-serif", fill: "white" }, radiusOffset: 16 }
+    const ordinalLabelStyle = { css: { font: "normal 15px sans-serif", fill: "white" }, radiusOffset: 16 }
+    const intermediateLabelStyle = { css: { font: "italic 10px sans-serif", fill: "white" }, radiusOffset: 16 }
+
+    directionLabels.push({ angle: 0, text: "N", style: cardinalLabelStyle });
+    directionLabels.push({ angle: 90, text: "E", style: cardinalLabelStyle });
+    directionLabels.push({ angle: 180, text: "S", style: cardinalLabelStyle });
+    directionLabels.push({ angle: 270, text: "W", style: cardinalLabelStyle });
+
+    directionLinesCount = 1;
+
+    if (options.cardinalLabels !== "cardinal") {
+      directionLabels.push({ angle: 45, text: "NE", style: ordinalLabelStyle });
+      directionLabels.push({ angle: 135, text: "SE", style: ordinalLabelStyle });
+      directionLabels.push({ angle: 225, text: "SW", style: ordinalLabelStyle });
+      directionLabels.push({ angle: 315, text: "NW", style: ordinalLabelStyle });
+      directionLinesCount = 2
+    }
+    if (options.cardinalLabels === "intermediate") {
+      directionLabels.push({ angle: 22.5, text: "NNE", style: intermediateLabelStyle });
+      directionLabels.push({ angle: 67.5, text: "ENE", style: intermediateLabelStyle });
+      directionLabels.push({ angle: 112.5, text: "ESE", style: intermediateLabelStyle });
+      directionLabels.push({ angle: 157.5, text: "SSE", style: intermediateLabelStyle });
+      directionLabels.push({ angle: 202.5, text: "SSE", style: intermediateLabelStyle });
+      directionLabels.push({ angle: 247.5, text: "WSW", style: intermediateLabelStyle });
+      directionLabels.push({ angle: 292.5, text: "WNW", style: intermediateLabelStyle });
+      directionLabels.push({ angle: 337.5, text: "NNW", style: intermediateLabelStyle });
+      directionLinesCount = 4
+    }
+  } else if (options.windroseLabels === "degree"){
+    const degreeLableStyle = { css: { font: "normal 12px sans-serif", fill: "white" }, radiusOffset: 16 }
+    let totalPetals = options.petalsPer90Deg*4;
+    let angleDiff = 360/totalPetals;
+    for(let i = 0; i < totalPetals; i++) {
+      let angle = angleDiff*i;
+      directionLabels.push({ angle: angle, text: angle+"°", style: degreeLableStyle });
+    }
+  }
+
+
 
   return (
-    <div
-      className={cx(
-        styles.wrapper,
-        css`
-          width: ${width}px;
-          height: ${height}px;
-        `
-      )}
-    >
-      <Windrose 
-        width={width} height={height} radius={windroseRadius} center={windroseCenter} 
-          data={windData} bucketsCount={options.petalsPer90Deg} 
-          styles={bucketStyles} changeStyle={setBucketStyles} tooltipDecimalPlaces={options.tooltipDecimalPlaces}/>
-
+    <div>
+      <Windrose
+        width={width} height={height} radius={windroseRadius} center={windroseCenter}
+        data={windData} bucketsCount={options.petalsPer90Deg} directionLabels={directionLabels}
+        styles={bucketStyles} changeStyle={setBucketStyles} tooltipDecimalPlaces={options.tooltipDecimalPlaces} directionLinesCount={directionLinesCount} />
+      <WindroseLegend bucketsSize={options.speedBucketsSize} bucketColors={colorBar} changeStyle={setBucketStyles} />
     </div>
+
   );
 };

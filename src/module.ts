@@ -49,25 +49,23 @@ export const plugin = new PanelPlugin<WindroseOptions>(WindrosePanel).setPanelOp
       description: 'How many bucket should be per every direction bucket.',
       defaultValue: 8
     })
-    .addBooleanSwitch({
+    /*.addBooleanSwitch({
       path: 'overwriteSpeedBucketBounds',
       name: 'Overwrite Speed Bucket Size',
       description: 'Allows user to overwrite speed buckets size. Default sizes are 7 buckets with bounds calculated based on max current wind speed.',
       defaultValue: false,
-    })
+    })*/
     .addNumberInput({
       path: 'speedBucketsSize',
       name: 'Speed bucket size.',
       description: '-- SOON --.',
-      defaultValue: 2,
-      showIf: (config) => config.overwriteSpeedBucketBounds
+      defaultValue: 2
     })
     .addNumberInput({
       path: 'tooltipDecimalPlaces',
       name: 'Tooltip decimal places.',
       description: '-- SOON --.',
-      defaultValue: 1,
-      showIf: (config) => config.overwriteSpeedBucketBounds
+      defaultValue: 1
     })
     .addStringArray({
       path: 'speedBucketSizeOverwrites',
@@ -75,5 +73,45 @@ export const plugin = new PanelPlugin<WindroseOptions>(WindrosePanel).setPanelOp
       description: '-- SOON --',
       defaultValue: [],
       showIf: (config) => config.overwriteSpeedBucketBounds
-    });
+    })
+    .addSelect({
+      path: 'windroseLabels',
+      name: 'Windrose labels',
+      defaultValue: 'compass',
+      settings: {
+        options: [
+          {
+            value: 'compass',
+            label: 'Compass directions',
+          },
+          {
+            value: 'degree',
+            label: 'Degrees of rotation',
+          }
+        ],
+      }
+    })
+    .addSelect({
+      path: 'cardinalLabels',
+      name: 'Cardinal labels',
+      defaultValue: 'cardinal',
+      settings: {
+        options: [
+          {
+            value: 'cardinal',
+            label: 'Cardinal directions (N,E,S,W)',
+          },
+          {
+            value: 'ordinal',
+            label: 'Ordinal directions (NE, SE, SW, NW)',
+          },
+          {
+            value: 'intermediate',
+            label: 'Intermediate directions (WNW, NNW, NNE ...)',
+          },
+        ],
+      },
+      showIf: (config) => config.windroseLabels === "compass"
+    })
+    ;
 });

@@ -2,31 +2,11 @@ import { Tooltip } from '@grafana/ui';
 import React from 'react';
 
 import { Svg } from './Svg'
-import { SpeedBucketStyle, WindroseProps } from 'types';
+import { WindroseProps } from 'types';
 import { constructCakeSlice, createPetalLine } from 'utils/svgUtils';
+import { onMouseEnterPolygon, onMouseLeavePolygon } from 'utils/stylesUtils';
 
-function onMouseEnter(event: React.MouseEvent<SVGPolygonElement, MouseEvent>, changeStyle: React.Dispatch<React.SetStateAction<SpeedBucketStyle[]>>, index: number) {
-  changeStyle((styles)=>{
-    let newStyles = [...styles]
-    newStyles[index].currentBucketStyle = newStyles[index].selectedBucketStyle;
-    return newStyles;
-  })
-  //let target = event.target as SVGElement;  
-  //target.setAttribute("stroke", "#aaaaaa")
-  //target.setAttribute("stroke-width", "2")
-}
-function onMouseLeave(event: React.MouseEvent<SVGPolygonElement, MouseEvent>, changeStyle: React.Dispatch<React.SetStateAction<SpeedBucketStyle[]>>, index: number) {
-  changeStyle((styles)=>{
-    let newStyles = [...styles]
-    newStyles[index].currentBucketStyle = newStyles[index].idleBucketStyle;
-    return newStyles;
-  })
-  //let target = event.target as SVGElement;
-  //target.setAttribute("stroke", "")
-  //target.setAttribute("stroke-width", "0")
-}
-
-export const Windrose = ({ data, width, height, center, radius, bucketsCount, styles, changeStyle, tooltipDecimalPlaces }: WindroseProps) => {
+export const Windrose = ({ data, width, height, center, radius, bucketsCount, styles, changeStyle, tooltipDecimalPlaces, directionLabels, directionLinesCount }: WindroseProps) => {
 
   let ringRadius = 25;
 
@@ -37,13 +17,22 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
   let circlesRings: JSX.Element[] = [];
 
   let angleDiff = Math.PI / petalNumber / 2;
-  let oneDegreeInRad = Math.PI / 180;
   for (let i = 0; i < petalNumber * 2; i++) {
     let angle = angleDiff * i;
 
     let isBold = i === 0 || i === petalNumber
-    linePetals.push(createPetalLine(angle, radius, center, isBold));
-    linePetals.push(createPetalLine(angle + Math.PI, radius, center, isBold));
+    linePetals.push(createPetalLine(angle, radius, center, isBold, true));
+    linePetals.push(createPetalLine(angle + Math.PI, radius, center, isBold, true));
+  }
+
+  let lineAngleDiff = Math.PI / directionLinesCount / 2;
+  let oneDegreeInRad = Math.PI / 180;
+  for (let i = 0; i < directionLinesCount * 2; i++) {
+    let angle = lineAngleDiff * i;
+
+    let isBold = i === 0 || i === directionLinesCount
+    linePetals.push(createPetalLine(angle, radius, center, isBold, false));
+    linePetals.push(createPetalLine(angle + Math.PI, radius, center, isBold, false));
   }
 
   let currentRingRadius = .1 * radius;
@@ -72,7 +61,7 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
       cakeSlices.push(
         <Tooltip content={Math.round(speedBucket.totalRelativeSize*100*Math.pow(10, tooltipDecimalPlaces))/Math.pow(10, tooltipDecimalPlaces)+"%"}>
           <polygon className={speedBucket.index.toString()} 
-          onMouseEnter={(event)=>{onMouseEnter(event, changeStyle, index)}} onMouseLeave={(event)=>{onMouseLeave(event, changeStyle, index)}} 
+          onMouseEnter={(event)=>{onMouseEnterPolygon(event, changeStyle, index)}} onMouseLeave={(event)=>{onMouseLeavePolygon(event, changeStyle, index)}} 
           points={polypointString} 
           fill={styles[index].currentBucketStyle.color} fillOpacity={styles[index].currentBucketStyle.opacity}/>
         </Tooltip>
@@ -89,6 +78,18 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
     percentLabels.push(<text x={x} y={y} style={{pointerEvents: 'none'}}>{i+"%"}</text>);
   }  
 
+  let cardinalLabels: JSX.Element[] = [];
+  for(let i = 0; i < directionLabels.length; i++){
+    let label = directionLabels[i];
+    let angle = (label.angle-90) * deg2rad;
+    let cardinalOffset = radius+label.style.radiusOffset;
+    let x = center.x+Math.cos(angle)*cardinalOffset
+    let y = center.y+Math.sin(angle)*cardinalOffset
+    cardinalLabels.push(
+      <text x={x} y={y} style={label.style.css} dominantBaseline="middle" textAnchor="middle">
+        {label.text}</text>);
+  }
+  
   return (
     <div>
       <div>
@@ -110,6 +111,9 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
             </Svg>
             <Svg>
               {percentLabels}
+            </Svg>
+            <Svg>
+              {cardinalLabels}
             </Svg>
           </Svg>
         </svg>

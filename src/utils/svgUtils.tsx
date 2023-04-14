@@ -39,10 +39,10 @@ export function constructCakeSlice(centerAngle: number, angleOffset: number, cir
     return polypoint;
 }
 
-export function createPetalLine(angle: number, radius: number, center: Vector2, isBold: boolean) {
+export function createPetalLine(angle: number, radius: number, center: Vector2, isBold: boolean, isDashed: boolean) {
     let innerCircleX = center.x + Math.cos(angle) * radius * .1;
     let outerCircleX = center.x + Math.cos(angle) * radius;
     let innerCircleY = center.y + Math.sin(angle) * radius * .1;
     let outerCircleY = center.y + Math.sin(angle) * radius;
-    return (<line x1= { innerCircleX } y1 = { innerCircleY } x2 = { outerCircleX } y2 = { outerCircleY } strokeWidth = { isBold? 4: 1 } stroke = '#222222' />);
+    return (<line x1= { innerCircleX } y1 = { innerCircleY } x2 = { outerCircleX } y2 = { outerCircleY } strokeWidth = { isBold? 4: 1 } stroke = '#222222' strokeDasharray={isDashed ? "2,5" : "" }/>);
 }
