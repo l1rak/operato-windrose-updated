@@ -45,12 +45,13 @@ export function sortToPetalBuckets(speedBucketSize: number, speedBucketCount: nu
 export function calculateWindroseData(windData: WindData, bucketsPer90Deg: number, speedBucketCount: number, speedBucketSize: number): WindroseData {    
     /*windData = {
         speed: [.1,.3,.6,.8,1.1,1.3,1.6,1.8],
-        direction: [0,0,0,0,0,0,0,0]
+        direction: [0,0,0,0,90,90,45,45]
     }*/
     
     // Global bounds inital values
     let totalBucketsCount = bucketsPer90Deg * 4;
     let globalBound = -Infinity;
+    let dataPointsCount = windData.speed.length;
 
     // Bucket array instantiation
     let buckets = new Array(totalBucketsCount);
@@ -58,7 +59,7 @@ export function calculateWindroseData(windData: WindData, bucketsPer90Deg: numbe
 
     // Bucket filling
     let bucketSize = 360 / (totalBucketsCount);
-    for (let i = 0; i < windData.direction.length; i++) {
+    for (let i = 0; i < dataPointsCount; i++) {
         let speed = windData.speed[i];
         let direction = windData.direction[i];
         globalBound = Math.max(globalBound, direction);
@@ -66,13 +67,18 @@ export function calculateWindroseData(windData: WindData, bucketsPer90Deg: numbe
         buckets[idx].push(speed)
     }
 
-    let windroseData = { petalBuckets: new Array<PetalBucket>(0) }
+    let windroseData = { petalBuckets: new Array<PetalBucket>(0), maxPetalPercent: 0 }
     let maxPetalSize = 0;
     for (let i = 0; i < buckets.length; i++) {
         if (buckets[i].length === 0) { continue; }
         maxPetalSize = Math.max(maxPetalSize, buckets[i].length);
         let speedBuckets = sortToPetalBuckets(speedBucketSize, speedBucketCount, buckets[i]);
-        windroseData.petalBuckets.push({ index: i, speedBuckets: speedBuckets, centerAngle: bucketSize * i, petalValuesCount: buckets[i].length });
+        windroseData.petalBuckets.push({
+            index: i, speedBuckets: speedBuckets, 
+            centerAngle: bucketSize * i,
+            petalValuesCount: buckets[i].length,
+            containedDataRatio: buckets[i].length/dataPointsCount
+        });
     }
 
 
@@ -82,6 +88,7 @@ export function calculateWindroseData(windData: WindData, bucketsPer90Deg: numbe
             speedBucket.totalRelativeSize /= windData.speed.length;
         })
     })
+    windroseData.maxPetalPercent = maxPetalSize/dataPointsCount;
 
     return windroseData;
 }  

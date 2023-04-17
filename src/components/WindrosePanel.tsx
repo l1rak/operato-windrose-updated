@@ -15,7 +15,6 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
 
   let colorBar = createColorMap(colorCheckpoints, options.speedBucketsCount);
 
-
   let constructingSpeedBucketStyles = Array<SpeedBucketStyle>(options.speedBucketsCount);
   for (let i = 0; i < constructingSpeedBucketStyles.length; i++) {
     let highlightedColor = highlightColor(colorBar[i], .25);

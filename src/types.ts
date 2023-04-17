@@ -50,10 +50,12 @@ export type PetalBucket = {
   index: number;
   centerAngle: number;
   petalValuesCount: number;
+  containedDataRatio: number;
 }
 
 export type WindroseData = {
   petalBuckets: PetalBucket[];
+  maxPetalPercent: number;
 }
 
 export type WindData = {

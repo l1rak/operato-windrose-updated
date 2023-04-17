@@ -2,19 +2,68 @@ import { Tooltip } from '@grafana/ui';
 import React from 'react';
 
 import { Svg } from './Svg'
-import { WindroseProps } from 'types';
+import { Vector2, WindroseData, WindroseProps } from 'types';
 import { constructCakeSlice, createPetalLine } from 'utils/svgUtils';
 import { onMouseEnterPolygon, onMouseLeavePolygon } from 'utils/stylesUtils';
 
+function createCircleScale(data: WindroseData, radius: number, center: Vector2, percentLabelAngle: number) {
+  // Create rings
+  let circlesRings: JSX.Element[] = [];
+  let topCirclesRings: JSX.Element[] = [];
+
+  let ringsCount = 5;
+  let subringsCount = 5;
+
+  let minimumSubringRadius = 275;
+  let ringRadius = radius * .9 / ringsCount;
+  for (let i = 0; i < ringsCount; i++) {
+    let currentRingRadius = radius * (.1 + .9 * i / ringsCount);
+    if (i > 0) { circlesRings.push(<circle cx={center.x} cy={center.y} r={currentRingRadius} strokeDasharray="" fill="transparent" stroke='#222222' strokeWidth='.5' />); }
+    //if (i > 0) { topCirclesRings.push(<circle cx={center.x} cy={center.y} r={currentRingRadius} strokeDasharray="" style={{ pointerEvents: 'none'}} fill="transparent" stroke='#222222' opacity={.1} strokeWidth='.5' />); }
+    if (radius > minimumSubringRadius) {
+      for (let j = 1; j < subringsCount; j++) {
+        currentRingRadius = radius * (.1 + .9 * i / ringsCount) + ringRadius * j / subringsCount;
+        circlesRings.push(<circle cx={center.x} cy={center.y} r={currentRingRadius} strokeDasharray="5,5" fill="transparent" stroke='#222222' strokeWidth='.25' />);
+        //topCirclesRings.push(<circle cx={center.x} cy={center.y} r={currentRingRadius} strokeDasharray="5,5" style={{ pointerEvents: 'none'}} fill="transparent" stroke='#222222' opacity={.1} strokeWidth='.25' />);
+      }
+    }
+  }
+
+  // Create percent labels
+  let percentLabels: JSX.Element[] = [];
+
+  let sin = Math.sin(percentLabelAngle);
+  let cos = Math.cos(percentLabelAngle);
+
+  let fontSize = 15*radius/minimumSubringRadius;
+  let adjustedFontSize = Math.min(15, fontSize);
+  let labelFont = `normal ${adjustedFontSize}px sans-serif`;
+  for (let i = 1; i < ringsCount; i++) {
+    let centerDistance = radius * (i / ringsCount * .9 + .1);
+    let x = center.x + cos * centerDistance;
+    let y = center.y + sin * centerDistance;
+    let percent = data.maxPetalPercent / ringsCount * i * 100;
+
+    percentLabels.push(
+      <text x={x} y={y} style={
+        { 
+          pointerEvents: 'none' ,
+          font: labelFont
+        }
+      }
+        dominantBaseline="auto" textAnchor="start"
+      >{Math.round(percent * 10) / 10 + "%"}</text>
+    );
+  }
+
+  return [circlesRings, topCirclesRings, percentLabels]
+}
+
 export const Windrose = ({ data, width, height, center, radius, bucketsCount, styles, changeStyle, tooltipDecimalPlaces, directionLabels, directionLinesCount }: WindroseProps) => {
 
-  let ringRadius = 25;
-
   let petalNumber = bucketsCount;
-  let ringNumber = Math.ceil(radius/ringRadius);
 
   let linePetals: JSX.Element[] = [];
-  let circlesRings: JSX.Element[] = [];
 
   let angleDiff = Math.PI / petalNumber / 2;
   for (let i = 0; i < petalNumber * 2; i++) {
@@ -35,11 +84,6 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
     linePetals.push(createPetalLine(angle + Math.PI, radius, center, isBold, false));
   }
 
-  let currentRingRadius = .1 * radius;
-  for (let i = 1; i <= ringNumber; i++) {
-    currentRingRadius += ringRadius;
-    circlesRings.push(<circle cx={center.x} cy={center.y} r={currentRingRadius} strokeDasharray="5,5" fill="transparent" stroke='#222222' strokeWidth='1' />);
-  }
 
   tooltipDecimalPlaces = Math.max(0, Math.round(tooltipDecimalPlaces))
 
@@ -59,42 +103,37 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
 
       let polypointString = constructCakeSlice(centerAngle, angleDiff - oneDegreeInRad, center, startRadius - .05, endRadius + .05);
       cakeSlices.push(
-        <Tooltip content={Math.round(speedBucket.totalRelativeSize*100*Math.pow(10, tooltipDecimalPlaces))/Math.pow(10, tooltipDecimalPlaces)+"%"}>
-          <polygon className={speedBucket.index.toString()} 
-          onMouseEnter={(event)=>{onMouseEnterPolygon(event, changeStyle, index)}} onMouseLeave={(event)=>{onMouseLeavePolygon(event, changeStyle, index)}} 
-          points={polypointString} 
-          fill={styles[index].currentBucketStyle.color} fillOpacity={styles[index].currentBucketStyle.opacity}/>
+        <Tooltip content={Math.round(speedBucket.totalRelativeSize * 100 * Math.pow(10, tooltipDecimalPlaces)) / Math.pow(10, tooltipDecimalPlaces) + "%"}>
+          <polygon className={speedBucket.index.toString()}
+            onMouseEnter={(event) => { onMouseEnterPolygon(event, changeStyle, index) }} onMouseLeave={(event) => { onMouseLeavePolygon(event, changeStyle, index) }}
+            points={polypointString}
+            fill={styles[index].currentBucketStyle.color} fillOpacity={styles[index].currentBucketStyle.opacity} />
         </Tooltip>
       );
     });
   }
 
-  let percentLabels: JSX.Element[] = [];
-  
-  let angle = angleDiff*2+angleDiff/2-90*deg2rad;
-  for (let i = 1; i <= ringNumber; i+=2) {
-    let x = center.x + Math.cos(angle)*(i/ringNumber)*radius;
-    let y = center.y + Math.sin(angle)*(i/ringNumber)*radius;
-    percentLabels.push(<text x={x} y={y} style={{pointerEvents: 'none'}}>{i+"%"}</text>);
-  }  
 
   let cardinalLabels: JSX.Element[] = [];
-  for(let i = 0; i < directionLabels.length; i++){
+  for (let i = 0; i < directionLabels.length; i++) {
     let label = directionLabels[i];
-    let angle = (label.angle-90) * deg2rad;
-    let cardinalOffset = radius+label.style.radiusOffset;
-    let x = center.x+Math.cos(angle)*cardinalOffset
-    let y = center.y+Math.sin(angle)*cardinalOffset
+    let angle = (label.angle - 90) * deg2rad;
+    let cardinalOffset = radius + label.style.radiusOffset;
+    let x = center.x + Math.cos(angle) * cardinalOffset
+    let y = center.y + Math.sin(angle) * cardinalOffset
     cardinalLabels.push(
       <text x={x} y={y} style={label.style.css} dominantBaseline="middle" textAnchor="middle">
         {label.text}</text>);
   }
-  
+
+  let percentLabelAngle = angleDiff * 2 + angleDiff / 2 - 90 * deg2rad;
+  let [circlesRings, topCirclesRings, percentLabels] = createCircleScale(data, radius, center, percentLabelAngle);
+
   return (
     <div>
       <div>
         <svg width={width} height={height}>
-          <Svg>          
+          <Svg>
             <circle cx={center.x} cy={center.y} r={radius} fill="#f0f0f0" />
 
             <circle cx={center.x} cy={center.y} r={radius * .1} fill="#dddddd" />
@@ -114,6 +153,9 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
             </Svg>
             <Svg>
               {cardinalLabels}
+            </Svg>
+            <Svg>
+              {topCirclesRings}
             </Svg>
           </Svg>
         </svg>

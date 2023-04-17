@@ -44,5 +44,5 @@ export function createPetalLine(angle: number, radius: number, center: Vector2, 
     let outerCircleX = center.x + Math.cos(angle) * radius;
     let innerCircleY = center.y + Math.sin(angle) * radius * .1;
     let outerCircleY = center.y + Math.sin(angle) * radius;
-    return (<line x1= { innerCircleX } y1 = { innerCircleY } x2 = { outerCircleX } y2 = { outerCircleY } strokeWidth = { isBold? 4: 1 } stroke = '#222222' strokeDasharray={isDashed ? "2,5" : "" }/>);
+    return (<line x1={innerCircleX} y1={innerCircleY} x2={outerCircleX} y2={outerCircleY} strokeWidth={isBold ? 4 : 1} stroke='#222222' strokeDasharray={isDashed ? "2,5" : ""} />);
 }

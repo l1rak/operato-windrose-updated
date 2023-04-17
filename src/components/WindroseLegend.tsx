@@ -33,7 +33,7 @@ export const WindroseLegend = ({ bucketsSize, bucketColors, changeStyle }: Windr
             position: "absolute",
             bottom: "8px",
             right: "8px",
-            width: "200px",
+            width: "150px",
             border: "3px solid #dddddd",
             borderRadius: "4px",
             padding: "4px",
