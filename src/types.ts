@@ -14,6 +14,8 @@ export interface WindroseOptions {
   speedBucketsSize: number;
   windroseLabels: string;
   cardinalLabels: string;
+  showLegend: boolean;
+  doesLegendOverlay: boolean;
 }
 
 export interface SpeedBucketStyleValues {

@@ -113,5 +113,16 @@ export const plugin = new PanelPlugin<WindroseOptions>(WindrosePanel).setPanelOp
       },
       showIf: (config) => config.windroseLabels === "compass"
     })
+    .addBooleanSwitch({
+      path: 'showLegend',
+      name: 'Show Legend',
+      defaultValue: true
+    })
+    .addBooleanSwitch({
+      path: 'doesLegendOverlay',
+      name: 'Does Legend Overlap',
+      defaultValue: false,
+      showIf: (config) => config.showLegend
+    })
     ;
 });

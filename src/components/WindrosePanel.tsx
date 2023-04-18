@@ -38,7 +38,8 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
 
   let padding = 32;
 
-  const windroseRadius = Math.min(height, width) / 2 - padding;
+  let legendOffset = !options.doesLegendOverlay && options.showLegend ? 150 : 0;
+  const windroseRadius = Math.min(height, width-legendOffset) / 2 - padding;
   const windroseCenter = { x: windroseRadius + padding, y: height / 2 }
 
   let directionLabels: DirectionLabel[] = [];
@@ -84,7 +85,7 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
     }
   }
 
-
+  let windroseLegend = <WindroseLegend bucketsSize={options.speedBucketsSize} bucketColors={colorBar} changeStyle={setBucketStyles} />
 
   return (
     <div>
@@ -92,7 +93,7 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
         width={width} height={height} radius={windroseRadius} center={windroseCenter}
         data={windData} bucketsCount={options.petalsPer90Deg} directionLabels={directionLabels}
         styles={bucketStyles} changeStyle={setBucketStyles} tooltipDecimalPlaces={options.tooltipDecimalPlaces} directionLinesCount={directionLinesCount} />
-      <WindroseLegend bucketsSize={options.speedBucketsSize} bucketColors={colorBar} changeStyle={setBucketStyles} />
+      { options.showLegend && windroseLegend }
     </div>
 
   );

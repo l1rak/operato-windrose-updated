@@ -36,3 +36,4 @@ e2e-results/
 # Confidential
 
 sign-plugin-private.sh
+*.zip
