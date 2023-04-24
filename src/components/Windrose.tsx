@@ -97,6 +97,8 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
     let centerAngle = ((petalBucket.centerAngle + 270) % 360) * deg2rad;
 
     let prevBucketSize = normalizedStartRadius;
+
+    let speedBucketLowerBound = 0
     petalBucket.speedBuckets.forEach((speedBucket, index) => {
       let startRadius = prevBucketSize;
       let endRadius = prevBucketSize + normalizedRadius * speedBucket.petalRelativeSize;
@@ -104,8 +106,22 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
 
       let polypointString = constructCakeSlice(centerAngle, angleDiff - oneDegreeInRad, center, startRadius - .05, endRadius + .05);
       let bucketStyle = styles[speedBucket.index];
+
+      let rangeTooltip;
+      if(index === petalBucket.speedBuckets.length-1){
+        rangeTooltip = <div>Range: &gt; {speedBucketLowerBound} m/s</div>;
+      } else {
+        rangeTooltip = <div>Range: {speedBucketLowerBound}-{speedBucket.speedUpperBound} m/s</div>;
+      }
+
+      let tooltipContent = <div>
+        <div>Size: <b>{Math.round(speedBucket.totalRelativeSize * 100 * Math.pow(10, tooltipDecimalPlaces)) / Math.pow(10, tooltipDecimalPlaces) + "%"}</b></div>
+        {rangeTooltip}
+      </div>
+      speedBucketLowerBound = speedBucket.speedUpperBound;
+
       petalBuckets.push(
-        <Tooltip content={Math.round(speedBucket.totalRelativeSize * 100 * Math.pow(10, tooltipDecimalPlaces)) / Math.pow(10, tooltipDecimalPlaces) + "%"}>
+        <Tooltip content={tooltipContent}>
           <polygon className={speedBucket.index.toString()}
             onMouseEnter={(event) => { onMouseEnterPolygon(event, changeStyle, speedBucket.index) }} onMouseLeave={(event) => { onMouseLeavePolygon(event, changeStyle, speedBucket.index) }}
             points={polypointString}

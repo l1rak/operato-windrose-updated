@@ -15,7 +15,7 @@ export function onMouseLeavePolygon(event: React.MouseEvent<SVGPolygonElement, M
     changeStyle((styles) => {
         let newStyles = [...styles]
         newStyles[index].currentBucketStyle = newStyles[index].idleBucketStyle;
-        newStyles[index].currentStrokeStyle = newStyles[index].bucketsStrokeStyle;
+        newStyles[index].currentStrokeStyle = newStyles[index].idleStrokeStyle;
         return newStyles;
     })
     //let target = event.target as SVGElement;
@@ -29,9 +29,6 @@ export function onMouseEnterDiv(event: React.MouseEvent<HTMLDivElement, MouseEve
         newStyles[index].currentBucketStyle = newStyles[index].selectedBucketStyle;
         return newStyles;
     })
-    //let target = event.target as SVGElement;  
-    //target.setAttribute("stroke", "#aaaaaa")
-    //target.setAttribute("stroke-width", "2")
 }
 export function onMouseLeaveDiv(event: React.MouseEvent<HTMLDivElement, MouseEvent>, changeStyle: React.Dispatch<React.SetStateAction<SpeedBucketStyle[]>>, index: number) {
     changeStyle((styles) => {
@@ -39,7 +36,4 @@ export function onMouseLeaveDiv(event: React.MouseEvent<HTMLDivElement, MouseEve
         newStyles[index].currentBucketStyle = newStyles[index].idleBucketStyle;
         return newStyles;
     })
-    //let target = event.target as SVGElement;
-    //target.setAttribute("stroke", "")
-    //target.setAttribute("stroke-width", "0")
 }

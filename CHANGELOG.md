@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.1 (Unreleased)
+
+Improved highlighting.
+Added speed range to tooltips.
+
 ## 0.6.0 (Unreleased)
 
 Added speed buckets stroke highlighting.

@@ -32,6 +32,7 @@ export interface SpeedBucketStyle {
   selectedBucketStyle: SpeedBucketStyleValues;
   currentBucketStyle: SpeedBucketStyleValues;
   bucketsStrokeStyle: SpeedBucketStrokeValues;
+  idleStrokeStyle: SpeedBucketStrokeValues;
   highlightsStrokeStyle: SpeedBucketStrokeValues;
   currentStrokeStyle: SpeedBucketStrokeValues;
 }
