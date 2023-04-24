@@ -22,11 +22,18 @@ export interface SpeedBucketStyleValues {
   color: string;
   opacity: number;
 }
+export interface SpeedBucketStrokeValues {
+  stroke: string;
+  strokeWidth: number;
+}
 
 export interface SpeedBucketStyle {
   idleBucketStyle: SpeedBucketStyleValues;
   selectedBucketStyle: SpeedBucketStyleValues;
   currentBucketStyle: SpeedBucketStyleValues;
+  bucketsStrokeStyle: SpeedBucketStrokeValues;
+  highlightsStrokeStyle: SpeedBucketStrokeValues;
+  currentStrokeStyle: SpeedBucketStrokeValues;
 }
 
 

@@ -87,7 +87,8 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
 
   tooltipDecimalPlaces = Math.max(0, Math.round(tooltipDecimalPlaces))
 
-  let cakeSlices: JSX.Element[] = [];
+  let petalBuckets: JSX.Element[] = [];
+  let petalBucketHighlights: JSX.Element[] = [];
   let normalizedRadius = radius * 0.9;
   let normalizedStartRadius = radius * 0.1;
   let deg2rad = Math.PI / 180;
@@ -102,14 +103,22 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
       prevBucketSize = endRadius;
 
       let polypointString = constructCakeSlice(centerAngle, angleDiff - oneDegreeInRad, center, startRadius - .05, endRadius + .05);
-      
-      cakeSlices.push(
+      let bucketStyle = styles[speedBucket.index];
+      petalBuckets.push(
         <Tooltip content={Math.round(speedBucket.totalRelativeSize * 100 * Math.pow(10, tooltipDecimalPlaces)) / Math.pow(10, tooltipDecimalPlaces) + "%"}>
           <polygon className={speedBucket.index.toString()}
             onMouseEnter={(event) => { onMouseEnterPolygon(event, changeStyle, speedBucket.index) }} onMouseLeave={(event) => { onMouseLeavePolygon(event, changeStyle, speedBucket.index) }}
             points={polypointString}
-            fill={styles[speedBucket.index].currentBucketStyle.color} fillOpacity={styles[speedBucket.index].currentBucketStyle.opacity} />
+            fill={bucketStyle.currentBucketStyle.color} fillOpacity={bucketStyle.currentBucketStyle.opacity}
+            stroke={bucketStyle.bucketsStrokeStyle.stroke} strokeWidth={bucketStyle.bucketsStrokeStyle.strokeWidth} />
         </Tooltip>
+      );
+      petalBucketHighlights.push(
+        <polygon className={speedBucket.index.toString()}
+            stroke={bucketStyle.currentStrokeStyle.stroke} strokeWidth={bucketStyle.currentStrokeStyle.strokeWidth}
+            style={{ pointerEvents: 'none' }}
+            points={polypointString}
+            fill="transparent"  />
       );
     });
   }
@@ -147,7 +156,10 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
               {linePetals}
             </Svg>
             <Svg>
-              {cakeSlices}
+              {petalBuckets}
+            </Svg>
+            <Svg>
+              {petalBucketHighlights}
             </Svg>
             <Svg>
               {percentLabels}

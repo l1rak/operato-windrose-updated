@@ -20,16 +20,26 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
     let highlightedColor = highlightColor(colorBar[i], .25);
     let idleBucketStyle = {
       color: colorBar[i],
-      opacity: 1
+      opacity: 1,
     }
     let selectedBucketStyle = {
       color: highlightedColor,
-      opacity: 1
+      opacity: 1,
     }
+
+    let idleStrokeStyle = {
+      stroke: "transparent", strokeWidth: 1
+    };
+
     constructingSpeedBucketStyles[i] = {
       idleBucketStyle: idleBucketStyle,
       selectedBucketStyle: selectedBucketStyle,
-      currentBucketStyle: idleBucketStyle
+      currentBucketStyle: idleBucketStyle,
+      bucketsStrokeStyle: idleStrokeStyle,
+      highlightsStrokeStyle: {
+        stroke: "white", strokeWidth: 2
+      },
+      currentStrokeStyle: idleStrokeStyle
     };
   }
   const [bucketStyles, setBucketStyles] = useState(constructingSpeedBucketStyles);

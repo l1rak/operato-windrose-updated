@@ -4,6 +4,7 @@ export function onMouseEnterPolygon(event: React.MouseEvent<SVGPolygonElement, M
     changeStyle((styles) => {
         let newStyles = [...styles]
         newStyles[index].currentBucketStyle = newStyles[index].selectedBucketStyle;
+        newStyles[index].currentStrokeStyle = newStyles[index].highlightsStrokeStyle;
         return newStyles;
     })
     //let target = event.target as SVGElement;  
@@ -14,6 +15,7 @@ export function onMouseLeavePolygon(event: React.MouseEvent<SVGPolygonElement, M
     changeStyle((styles) => {
         let newStyles = [...styles]
         newStyles[index].currentBucketStyle = newStyles[index].idleBucketStyle;
+        newStyles[index].currentStrokeStyle = newStyles[index].bucketsStrokeStyle;
         return newStyles;
     })
     //let target = event.target as SVGElement;
