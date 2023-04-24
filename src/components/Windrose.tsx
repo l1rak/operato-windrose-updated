@@ -102,12 +102,13 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
       prevBucketSize = endRadius;
 
       let polypointString = constructCakeSlice(centerAngle, angleDiff - oneDegreeInRad, center, startRadius - .05, endRadius + .05);
+      
       cakeSlices.push(
         <Tooltip content={Math.round(speedBucket.totalRelativeSize * 100 * Math.pow(10, tooltipDecimalPlaces)) / Math.pow(10, tooltipDecimalPlaces) + "%"}>
           <polygon className={speedBucket.index.toString()}
-            onMouseEnter={(event) => { onMouseEnterPolygon(event, changeStyle, index) }} onMouseLeave={(event) => { onMouseLeavePolygon(event, changeStyle, index) }}
+            onMouseEnter={(event) => { onMouseEnterPolygon(event, changeStyle, speedBucket.index) }} onMouseLeave={(event) => { onMouseLeavePolygon(event, changeStyle, speedBucket.index) }}
             points={polypointString}
-            fill={styles[index].currentBucketStyle.color} fillOpacity={styles[index].currentBucketStyle.opacity} />
+            fill={styles[speedBucket.index].currentBucketStyle.color} fillOpacity={styles[speedBucket.index].currentBucketStyle.opacity} />
         </Tooltip>
       );
     });

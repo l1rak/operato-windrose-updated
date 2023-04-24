@@ -25,7 +25,7 @@ export function extractData(data: PanelData) {
 export function sortToPetalBuckets(speedBucketSize: number, speedBucketCount: number, speedData: number[]): SpeedBucket[] {
     let buckets = new Array<SpeedBucket>(0);
     for (let i = 1; i <= speedBucketCount; i++) {
-        buckets.push({ index: i, speedUpperBound: speedBucketSize * (i), totalRelativeSize: 0, petalRelativeSize: 0 });
+        buckets.push({ index: i-1, speedUpperBound: speedBucketSize * (i), totalRelativeSize: 0, petalRelativeSize: 0 });
     }
 
     speedData.forEach((item) => {
