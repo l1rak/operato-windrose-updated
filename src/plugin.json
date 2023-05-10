@@ -5,7 +5,7 @@
   "id": "operato-windrose-panel",
   "info": {
     "keywords": ["panel"],
-    "description": "Wind parameters visualization panel",
+    "description": "Wind parameter visualization panel",
     "author": {
       "name": "Operato"
     },

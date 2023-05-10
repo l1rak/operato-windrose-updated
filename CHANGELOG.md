@@ -1,4 +1,11 @@
-# Changelog
+# Changelog <img src="./src/img/operato-windrose-logo.svg" width=32>
+
+## 0.6.2 (Unreleased)
+
+Updated settings descriptions.
+Updated README.md.
+Fixed hovering on legned not afecting bucket borders. 
+Changed legend icons using the same styles as WindrosePanel. 
 
 ## 0.6.1 (Unreleased)
 

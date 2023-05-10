@@ -27,6 +27,7 @@ export function onMouseEnterDiv(event: React.MouseEvent<HTMLDivElement, MouseEve
     changeStyle((styles) => {
         let newStyles = [...styles]
         newStyles[index].currentBucketStyle = newStyles[index].selectedBucketStyle;
+        newStyles[index].currentStrokeStyle = newStyles[index].highlightsStrokeStyle;
         return newStyles;
     })
 }
@@ -34,6 +35,7 @@ export function onMouseLeaveDiv(event: React.MouseEvent<HTMLDivElement, MouseEve
     changeStyle((styles) => {
         let newStyles = [...styles]
         newStyles[index].currentBucketStyle = newStyles[index].idleBucketStyle;
+        newStyles[index].currentStrokeStyle = newStyles[index].idleStrokeStyle;
         return newStyles;
     })
 }

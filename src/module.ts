@@ -4,39 +4,6 @@ import { WindrosePanel } from './components/WindrosePanel';
 
 export const plugin = new PanelPlugin<WindroseOptions>(WindrosePanel).setPanelOptions((builder) => {
   return builder
-    /*.addTextInput({
-      path: 'text',
-      name: 'Simple text option',
-      description: 'Description of panel option',
-      defaultValue: 'Default value of text input option',
-    })
-    .addBooleanSwitch({
-      path: 'showSeriesCount',
-      name: 'Show series counter',
-      defaultValue: false,
-    })
-    .addRadio({
-      path: 'seriesCountSize',
-      defaultValue: 'sm',
-      name: 'Series counter size',
-      settings: {
-        options: [
-          {
-            value: 'sm',
-            label: 'Small',
-          },
-          {
-            value: 'md',
-            label: 'Medium',
-          },
-          {
-            value: 'lg',
-            label: 'Large',
-          },
-        ],
-      },
-      //showIf: (config) => config.showSeriesCount,
-    })*/
     .addNumberInput({
       path: 'petalsPer90Deg',
       name: 'Petals per 90 degree',
@@ -49,30 +16,17 @@ export const plugin = new PanelPlugin<WindroseOptions>(WindrosePanel).setPanelOp
       description: 'How many bucket should be per every direction bucket.',
       defaultValue: 8
     })
-    /*.addBooleanSwitch({
-      path: 'overwriteSpeedBucketBounds',
-      name: 'Overwrite Speed Bucket Size',
-      description: 'Allows user to overwrite speed buckets size. Default sizes are 7 buckets with bounds calculated based on max current wind speed.',
-      defaultValue: false,
-    })*/
     .addNumberInput({
       path: 'speedBucketsSize',
       name: 'Speed bucket size.',
-      description: '-- SOON --.',
+      description: 'Sets the size of each speed bucket (in m/s).',
       defaultValue: 2
     })
     .addNumberInput({
       path: 'tooltipDecimalPlaces',
       name: 'Tooltip decimal places.',
-      description: '-- SOON --.',
+      description: 'How many decimal places should be displayed in tooltip.',
       defaultValue: 1
-    })
-    .addStringArray({
-      path: 'speedBucketSizeOverwrites',
-      name: 'Speed bucket overwrite',
-      description: '-- SOON --',
-      defaultValue: [],
-      showIf: (config) => config.overwriteSpeedBucketBounds
     })
     .addSelect({
       path: 'windroseLabels',

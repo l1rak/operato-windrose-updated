@@ -29,7 +29,7 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
     }
 
     let idleStrokeStyle = {
-      stroke: "transparent", strokeWidth: 1
+      stroke: "transparent", strokeWidth: 0
     };
 
     constructingSpeedBucketStyles[i] = {
@@ -99,7 +99,7 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
     }
   }
 
-  let windroseLegend = <WindroseLegend bucketsSize={options.speedBucketsSize} bucketColors={colorBar} changeStyle={setBucketStyles} />
+  let windroseLegend = <WindroseLegend bucketsSize={options.speedBucketsSize} bucketStyles={bucketStyles} changeStyle={setBucketStyles} />
 
   return (
     <div>

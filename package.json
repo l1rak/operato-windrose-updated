@@ -1,7 +1,7 @@
 {
   "name": "operato-windrose",
-  "version": "0.6.1",
-  "description": "Wind parameters visualization panel",
+  "version": "0.6.2",
+  "description": "Wind parameter visualization panel",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
     "dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",

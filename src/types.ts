@@ -105,6 +105,6 @@ export type WindroseProps = {
 
 export type WindroseLegendProps = {
   bucketsSize: number;
-  bucketColors: string[];  
+  bucketStyles: SpeedBucketStyle[];  
   changeStyle: React.Dispatch<React.SetStateAction<SpeedBucketStyle[]>>;
 }

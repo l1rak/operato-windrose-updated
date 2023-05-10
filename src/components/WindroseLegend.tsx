@@ -3,18 +3,19 @@ import { WindroseLegendProps } from 'types';
 import { onMouseEnterDiv, onMouseLeaveDiv } from 'utils/stylesUtils';
 
 
-export const WindroseLegend = ({ bucketsSize, bucketColors, changeStyle }: WindroseLegendProps) => {
+export const WindroseLegend = ({ bucketsSize, bucketStyles, changeStyle }: WindroseLegendProps) => {
 
     let legendItems: Array<React.ReactElement<any>> = []
 
     let bucketStart = 0;
 
-    for (let i = 0; i < bucketColors.length; i++) {
+    for (let i = 0; i < bucketStyles.length; i++) {
         let icon = <div style={{
             width: "20px",
             height: "10px",
-            background: bucketColors[i],
-            border: "1px solid "+bucketColors[i],
+            background: bucketStyles[i].currentBucketStyle.color,
+            opacity: bucketStyles[i].currentBucketStyle.opacity,
+            outline: bucketStyles[i].currentStrokeStyle.strokeWidth+"px solid "+bucketStyles[i].currentStrokeStyle.stroke,
             borderRadius: "4px",
             margin: "auto",
             marginRight: "6px",
@@ -23,7 +24,7 @@ export const WindroseLegend = ({ bucketsSize, bucketColors, changeStyle }: Windr
         onMouseEnter={(event)=>{onMouseEnterDiv(event, changeStyle, i)}} onMouseLeave={(event)=>{onMouseLeaveDiv(event, changeStyle, i)}} 
         />
         let speedLabel = bucketStart + " - " + (bucketStart + bucketsSize);
-        if(bucketColors.length-1 === i) {speedLabel = " > "+bucketStart;}
+        if(bucketStyles.length-1 === i) {speedLabel = " > "+bucketStart;}
         bucketStart += bucketsSize;
         legendItems.push(<div style={{ display: 'flex' }}>{icon} {speedLabel}</div>)
     }
