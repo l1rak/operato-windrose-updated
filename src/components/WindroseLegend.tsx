@@ -3,7 +3,7 @@ import { WindroseLegendProps } from 'types';
 import { onMouseEnterDiv, onMouseLeaveDiv } from 'utils/stylesUtils';
 
 
-export const WindroseLegend = ({ bucketsSize, bucketStyles, changeStyle }: WindroseLegendProps) => {
+export const WindroseLegend = ({ bucketsSize, bucketStyles, changeStyle, windSpeedUnit }: WindroseLegendProps) => {
 
     let legendItems: Array<React.ReactElement<any>> = []
 
@@ -44,7 +44,7 @@ export const WindroseLegend = ({ bucketsSize, bucketStyles, changeStyle }: Windr
         }}>
             <div style={{
                 justifyContent: 'center'
-            }}>Wind speed (m/s)</div>
+            }}>Wind speed ({windSpeedUnit})</div>
             {legendItems}
         </div>
 

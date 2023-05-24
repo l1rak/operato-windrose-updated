@@ -5,6 +5,7 @@ import { Windrose } from './Windrose';
 import { createColorMap, highlightColor } from '../utils/colorUtils'
 import { calculateWindroseData, extractData } from 'utils/dataUtils';
 import { WindroseLegend } from './WindroseLegend';
+import { getWindSpeedUnitLabel } from 'utils/labelUtils';
 
 interface WindrosePanelProps extends PanelProps<WindroseOptions> { }
 
@@ -99,14 +100,16 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
     }
   }
 
-  let windroseLegend = <WindroseLegend bucketsSize={options.speedBucketsSize} bucketStyles={bucketStyles} changeStyle={setBucketStyles} />
+  let windSpeedUnit = getWindSpeedUnitLabel(options.windSpeedUnit);
+  let windroseLegend = <WindroseLegend bucketsSize={options.speedBucketsSize} bucketStyles={bucketStyles} changeStyle={setBucketStyles} windSpeedUnit={windSpeedUnit} /> 
 
   return (
     <div>
       <Windrose
         width={width} height={height} radius={windroseRadius} center={windroseCenter}
         data={windData} bucketsCount={options.petalsPer90Deg} directionLabels={directionLabels}
-        styles={bucketStyles} changeStyle={setBucketStyles} tooltipDecimalPlaces={options.tooltipDecimalPlaces} directionLinesCount={directionLinesCount} />
+        styles={bucketStyles} changeStyle={setBucketStyles} tooltipDecimalPlaces={options.tooltipDecimalPlaces} 
+        directionLinesCount={directionLinesCount} windSpeedUnit={windSpeedUnit}/>
       { options.showLegend && windroseLegend }
     </div>
 

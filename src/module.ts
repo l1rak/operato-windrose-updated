@@ -29,6 +29,35 @@ export const plugin = new PanelPlugin<WindroseOptions>(WindrosePanel).setPanelOp
       defaultValue: 1
     })
     .addSelect({
+      path: 'windSpeedUnit',
+      name: 'Wind speed unit',
+      defaultValue: 'ms',
+      settings: {
+        options: [
+          {
+            value: 'ms',
+            label: 'Meters per second (m/s)',
+          },          
+          {
+            value: 'kmh',
+            label: 'Kilometers per hour (km/h)',
+          },         
+          {
+            value: 'mps',
+            label: 'Miles per hour (mph)',
+          },         
+          {
+            value: 'ftps',
+            label: 'Feet per second (ft/s)',
+          },         
+          {
+            value: 'kt',
+            label: 'Knots (kt)',
+          },
+        ],
+      }
+    })
+    .addSelect({
       path: 'windroseLabels',
       name: 'Windrose labels',
       defaultValue: 'compass',

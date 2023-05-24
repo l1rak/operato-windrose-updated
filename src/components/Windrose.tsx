@@ -59,7 +59,7 @@ function createCircleScale(data: WindroseData, radius: number, center: Vector2, 
   return [circlesRings, topCirclesRings, percentLabels]
 }
 
-export const Windrose = ({ data, width, height, center, radius, bucketsCount, styles, changeStyle, tooltipDecimalPlaces, directionLabels, directionLinesCount }: WindroseProps) => {
+export const Windrose = ({ data, width, height, center, radius, bucketsCount, styles, changeStyle, tooltipDecimalPlaces, directionLabels, directionLinesCount, windSpeedUnit }: WindroseProps) => {
 
   let petalNumber = bucketsCount;
 
@@ -109,9 +109,9 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
 
       let rangeTooltip;
       if(index === petalBucket.speedBuckets.length-1){
-        rangeTooltip = <div>Range: &gt; {speedBucketLowerBound} m/s</div>;
+        rangeTooltip = <div>Range: &gt; {speedBucketLowerBound} {windSpeedUnit}</div>;
       } else {
-        rangeTooltip = <div>Range: {speedBucketLowerBound}-{speedBucket.speedUpperBound} m/s</div>;
+        rangeTooltip = <div>Range: {speedBucketLowerBound}-{speedBucket.speedUpperBound} {windSpeedUnit}</div>;
       }
 
       let tooltipContent = <div>

@@ -1,5 +1,11 @@
 # Changelog <img src="./src/img/operato-windrose-logo.svg" width=32>
 
+## 0.6.3 (Unreleased)
+
+Added option to select wind speed unit in panel settings.
+Selectrd wind pseed unit will be correctly displayed in legend and tooltip.
+Added v0.6.3 to builds.
+
 ## 0.6.2 (Unreleased)
 
 Updated settings descriptions.

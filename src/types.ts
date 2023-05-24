@@ -16,6 +16,7 @@ export interface WindroseOptions {
   cardinalLabels: string;
   showLegend: boolean;
   doesLegendOverlay: boolean;
+  windSpeedUnit: string;
 }
 
 export interface SpeedBucketStyleValues {
@@ -100,11 +101,13 @@ export type WindroseProps = {
   directionLinesCount: number;
   changeStyle: React.Dispatch<React.SetStateAction<SpeedBucketStyle[]>>;
   tooltipDecimalPlaces: number;
-  directionLabels: DirectionLabel[]
+  directionLabels: DirectionLabel[];
+  windSpeedUnit: string;
 };
 
 export type WindroseLegendProps = {
   bucketsSize: number;
   bucketStyles: SpeedBucketStyle[];  
   changeStyle: React.Dispatch<React.SetStateAction<SpeedBucketStyle[]>>;
+  windSpeedUnit: string;
 }
