@@ -17,6 +17,7 @@ export interface WindroseOptions {
   showLegend: boolean;
   doesLegendOverlay: boolean;
   windSpeedUnit: string;
+  colorPalette: string;
 }
 
 export interface SpeedBucketStyleValues {
@@ -37,7 +38,6 @@ export interface SpeedBucketStyle {
   highlightsStrokeStyle: SpeedBucketStrokeValues;
   currentStrokeStyle: SpeedBucketStrokeValues;
 }
-
 
 export type Vector2 = {
   x: number,

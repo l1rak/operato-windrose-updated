@@ -1,9 +1,10 @@
 <!-- This README file is going to be the one displayed on the Grafana.com website for your plugin -->
 
-# Operato Windrose
+# Operato Windrose <img src="./img/operato-windrose-logo.svg" width=32>
 
 Operato Windrose is a visualization panel for displaying wind weather data. 
 
+<img src="./img/screenshots/screenshow_windrose_default.jpg" height=400>
 
 ## How to setup a Grafana dashboard with Operato Windrose panel?
 
@@ -55,3 +56,6 @@ A short explanation of each of the settings can be found in the settings panel. 
     - *Miles per hour (mph)*
     - *Feet per second (ft/s)*
     - *Knots (kt)*
+
+# License
+Apache License Version 2.0, see [LICENSE](https://git.operato.eu/open-source/operato-windrose-panel/-/blob/main/LICENSE).

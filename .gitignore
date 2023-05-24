@@ -35,7 +35,9 @@ e2e-results/
 
 # Confidential
 
-sign-plugin-private.sh
+/scripts
+sign-plugin-*
 *.zip
 operato-windrose-panel-*
 !builds/**/*
+.DS_Store

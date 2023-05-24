@@ -3,7 +3,45 @@ import { WindroseOptions } from './types';
 import { WindrosePanel } from './components/WindrosePanel';
 
 export const plugin = new PanelPlugin<WindroseOptions>(WindrosePanel).setPanelOptions((builder) => {
-  return builder
+  return builder 
+    .addSelect({
+      path: 'colorPalette',
+      name: 'Color palette',
+      description: 'Color palette of speed buckets.',
+      defaultValue: 'default',
+      settings: {
+        options: [   
+          {
+            value: 'default',
+            label: 'Default',
+          },   
+          {
+            value: 'operato',
+            label: 'Operato theme',
+          },  
+          {
+            value: 'greenred',
+            label: 'Green-red',
+          },    
+          {
+            value: 'bluered',
+            label: 'Blue-red',
+          },    
+          {
+            value: 'grayscale',
+            label: 'Gray scale',
+          },    
+          {
+            value: 'redscale',
+            label: 'Red scale',
+          },     
+          {
+            value: 'bluescale',
+            label: 'Blue scale',
+          }
+        ],
+      }
+    })
     .addNumberInput({
       path: 'petalsPer90Deg',
       name: 'Petals per 90 degree',
@@ -31,6 +69,7 @@ export const plugin = new PanelPlugin<WindroseOptions>(WindrosePanel).setPanelOp
     .addSelect({
       path: 'windSpeedUnit',
       name: 'Wind speed unit',
+      description: 'What measurement unit will be used in legend and tooltip. !IMPORTANT! This will not convert values.',
       defaultValue: 'ms',
       settings: {
         options: [

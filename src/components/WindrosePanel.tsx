@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PanelProps } from '@grafana/data';
 import { DirectionLabel, SpeedBucketStyle, WindroseOptions } from 'types';
 import { Windrose } from './Windrose';
@@ -9,14 +9,24 @@ import { getWindSpeedUnitLabel } from 'utils/labelUtils';
 
 interface WindrosePanelProps extends PanelProps<WindroseOptions> { }
 
-export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, width, height }) => {
-  let colorCheckpoints = [
-    "#3844f2", "#44f2a7", "#ecf238", "#f23838"
-  ]
+function getPredefinedColorPalette(key: string) {
+  switch(key){
+    case "operato": return ["#1b1c20", "#ffffff", "#e6a749"]
+    case "greenred": return ["#4af244", "#ecf238", "#f23838"];
+    case "bluered": return [ "#5e74ff", "#d4d4d4", "#ed3e3e" ];
+    case "grayscale": return ["#bfbfbf", "#3b3b3b"];
+    case "redscale": return [ "#ff8f8f", "#400000" ];
+    case "bluescale": return [ "#8fe5ff", "#002b38" ];
+    default: return [ "#3844f2", "#44f2a7", "#ecf238", "#f23838" ];
+  }
+}
 
+export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, width, height }) => {
+  let colorCheckpoints = getPredefinedColorPalette(options.colorPalette);
   let colorBar = createColorMap(colorCheckpoints, options.speedBucketsCount);
 
   let constructingSpeedBucketStyles = Array<SpeedBucketStyle>(options.speedBucketsCount);
+  
   for (let i = 0; i < constructingSpeedBucketStyles.length; i++) {
     let highlightedColor = highlightColor(colorBar[i], -.5);
     let highlightedStrokeColor = highlightColor(colorBar[i], .5);
@@ -48,8 +58,13 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
     };
   }
   const [bucketStyles, setBucketStyles] = useState(constructingSpeedBucketStyles);
-
+  useEffect(() => {
+    setBucketStyles(constructingSpeedBucketStyles);
+  }, [constructingSpeedBucketStyles]);
+  
   let windData = calculateWindroseData(extractData(data), options.petalsPer90Deg, options.speedBucketsCount, options.speedBucketsSize)
+
+  
 
   let padding = 32;
 

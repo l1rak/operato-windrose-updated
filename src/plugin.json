@@ -14,7 +14,24 @@
       "large": "img/operato-windrose-logo.svg"
     },
     "links": [],
-    "screenshots": [],
+    "screenshots": [
+      {
+        "name": "Example of Operato Windrose panel.",
+        "path": "img/screenshots/screenshow_windrose_default.jpg"
+      },
+      {
+        "name": "Operato Windrose panel using Operato color theme.",
+        "path": "img/screenshots/screenshow_windrose_operato.jpg"
+      },
+      {
+        "name": "Operato Windrose panel using Blue scale color theme.",
+        "path": "img/screenshots/screenshow_windrose_bluescale.jpg"
+      },
+      {
+        "name": "Operato Windrose panel using Blue-Red color theme.",
+        "path": "img/screenshots/screenshow_windrose_bluered.jpg"
+      }
+    ],
     "version": "%VERSION%",
     "updated": "%TODAY%"
   },
