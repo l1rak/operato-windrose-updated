@@ -2,7 +2,7 @@ import { Tooltip } from '@grafana/ui';
 import React from 'react';
 
 import { Svg } from './Svg'
-import { Vector2, WindroseData, WindroseProps } from 'types';
+import { PetalBucket, Vector2, WindroseData, WindroseProps } from 'types';
 import { constructCakeSlice, createPetalLine } from 'utils/svgUtils';
 import { onMouseEnterPolygon, onMouseLeavePolygon } from 'utils/stylesUtils';
 
@@ -57,6 +57,29 @@ function createCircleScale(data: WindroseData, radius: number, center: Vector2, 
   }
 
   return [circlesRings, topCirclesRings, percentLabels]
+}
+
+function determinePercentLabelAngle(angleDiff: number, petalBuckets: PetalBucket[], petalsPer90Degree: number) {
+  let deg2rad = Math.PI/180;
+  let bucketsCount = petalsPer90Degree*4;
+  let petalSizes = new Array(bucketsCount).fill(0);
+
+  petalBuckets.forEach(petal => {
+    petalSizes[petal.index] = petal.petalValuesCount;
+  });
+
+  let minSum = petalSizes[0]+petalSizes[petalSizes.length-1];
+  let minIndex = 0;
+  for(let i = 1; i < bucketsCount; i++){
+    let petal1 = petalSizes[i-1];
+    let petal2 = petalSizes[i];
+    if(petal1+petal2<minSum){
+      minSum = petal1+petal2;
+      minIndex = i;
+    }
+  }
+
+  return angleDiff * (minIndex-1) + angleDiff / 2 - 90 * deg2rad;
 }
 
 export const Windrose = ({ data, width, height, center, radius, bucketsCount, styles, changeStyle, tooltipDecimalPlaces, directionLabels, directionLinesCount, windSpeedUnit }: WindroseProps) => {
@@ -152,7 +175,7 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
         {label.text}</text>);
   }
 
-  let percentLabelAngle = angleDiff * 2 + angleDiff / 2 - 90 * deg2rad;
+  let percentLabelAngle = determinePercentLabelAngle(angleDiff, data.petalBuckets, bucketsCount);
   let [circlesRings, topCirclesRings, percentLabels] = createCircleScale(data, radius, center, percentLabelAngle);
 
   return (

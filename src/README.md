@@ -43,6 +43,15 @@ A short explanation of each of the settings can be found in the settings panel. 
 - ***Speed bucket size:*** Sets the speed range (in m/s) of each bucket. Combined with *Buckets per each petal* setting, they set the total range of the graph. 
 - ***Tooltip decimal places:*** This setting determines how many decimal places should be displayed in the tooltip when hovering over speed buckets.
 - ***Windrose labels:*** Sets the type of labels to be displayed around the Windrose graph. Either *Compas directions* or *Degrees of rotation*. 
-- ***Cardinal labels:*** Allows user to select the level of directions to be displayed on the graph: *Cardinal directions* (N,W,S,E), *Ordinal directions* (NW,WS,SE,NE) or *Intermediate directions* (WNW, NNW, NNE, ...)
+- ***Cardinal labels:*** Allows user to select the level of directions to be displayed on the graph: 
+    - *Cardinal directions* (N,W,S,E), 
+    - *Ordinal directions* (NW,WS,SE,NE)
+    - *Intermediate directions* (WNW, NNW, NNE, ...)
 - ***Show legend:*** Determines if the legend should be displayed.
 - ***Does legend overlap:*** If turned on, the legend will overlap the Windrose graph. If turned off, the panel will make sure that the legend will not overlap the Windrose graph, no matter the size of the panel window.
+- ***Wind speed unit:***: Used to change the unit of mesurement for wind speed. The following units are available:
+    - *Meters per second (m/s)*
+    - *Kilometers per hour (km/h)*
+    - *Miles per hour (mph)*
+    - *Feet per second (ft/s)*
+    - *Knots (kt)*

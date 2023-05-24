@@ -1,10 +1,16 @@
 # Changelog <img src="./src/img/operato-windrose-logo.svg" width=32>
 
+## 0.6.4 (Unreleased)
+
+Minor grammar corrections in CHANGELOG.md.
+Update README.md to include description of `Wind Speed Unit` setting.
+Added v0.6.4 to builds.
+Percent labels on Windrose are now placed at the position with the smallest petals.
+
 ## 0.6.3 (Unreleased)
 
 Added option to select wind speed unit in panel settings.
-Selectrd wind pseed unit will be correctly displayed in legend and tooltip.
-Added v0.6.3 to builds.
+Selected wind speed unit will be correctly displayed in legend and tooltip.
 
 ## 0.6.2 (Unreleased)
 
