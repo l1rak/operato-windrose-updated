@@ -32,8 +32,8 @@
         "path": "img/screenshots/screenshow_windrose_bluered.jpg"
       }
     ],
-    "version": "%VERSION%",
-    "updated": "%TODAY%"
+    "version": "0.6.7",
+    "updated": "2023-05-24"
   },
   "dependencies": {
     "grafanaDependency": ">=9.3.8",

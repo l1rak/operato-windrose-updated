@@ -35,16 +35,19 @@ export const WindroseLegend = ({ bucketsSize, bucketStyles, changeStyle, windSpe
             bottom: "8px",
             right: "8px",
             width: "150px",
-            border: "3px solid #dddddd",
-            borderRadius: "4px",
-            padding: "4px",
+            border: "4px solid #4b4c50",
+            borderRadius: "16px",
+            padding: "8px",
 
-            background: "white",
+            // DATK THEME
+            //background: "#4b4c50",
+            //color: "white",
+            background: "#f2f2f2",
             color: "black",
         }}>
             <div style={{
                 justifyContent: 'center'
-            }}>Wind speed ({windSpeedUnit})</div>
+            }}><b>Wind speed ({windSpeedUnit})</b></div>
             {legendItems}
         </div>
 
