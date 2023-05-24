@@ -1,5 +1,11 @@
 # Changelog <img src="./src/img/operato-windrose-logo.svg" width=32>
 
+## 0.6.6 (Unreleased)
+
+- Fixed Speed buckets not highlighting due to useState for Color palette swapping.
+- Set v0.6.6 as release candidate.
+- Added v0.6.6 to builds.
+
 ## 0.6.5 (Unreleased)
 
 - Added screenshots to plugin.json.
@@ -12,7 +18,6 @@
 
 - Minor grammar corrections in CHANGELOG.md.
 - Update README.md to include description of `Wind Speed Unit` setting.
-- Added v0.6.4 to builds.
 - Percent labels on Windrose are now placed at the position with the smallest petals.
 
 ## 0.6.3 (Unreleased)
