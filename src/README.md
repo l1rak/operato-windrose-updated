@@ -1,10 +1,8 @@
-<!-- This README file is going to be the one displayed on the Grafana.com website for your plugin -->
+[//]: # (This README file is going to be the one displayed on the Grafana.com website for your plugin)
 
-# Operato Windrose <img src="https://git.operato.eu/open-source/operato-windrose-panel/-/raw/v0.6.8/src/img/operato-windrose-logo.svg" width=32>
+# Operato Windrose ![](https://git.operato.eu/open-source/operato-windrose-panel/-/raw/v1.0.0/src/img/operato-windrose-logo-small.svg)
 
-Operato Windrose is a visualization panel for displaying wind weather data. 
-
-<img src="https://git.operato.eu/open-source/operato-windrose-panel/-/raw/v0.6.8/src/img/screenshots/screenshow_windrose_default.jpg" height=400>
+Operato Windrose is a visualization panel for displaying wind weather data using a windrose diagram. 
 
 ## How to setup a Grafana dashboard with Operato Windrose panel?
 

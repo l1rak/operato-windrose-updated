@@ -21,7 +21,7 @@
       "type": "panel",
       "id": "operato-windrose-panel",
       "name": "Operato Windrose",
-      "version": "0.6.8"
+      "version": "1.0.0"
     },
     {
       "type": "datasource",

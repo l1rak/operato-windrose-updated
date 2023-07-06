@@ -1,4 +1,9 @@
-# Changelog <img src="https://git.operato.eu/open-source/operato-windrose-panel/-/raw/v0.6.8/src/img/operato-windrose-logo.svg" width=32>
+# Changelog ![](https://git.operato.eu/open-source/operato-windrose-panel/-/raw/v1.0.0/src/img/operato-windrose-logo-small.svg)
+
+## 1.0.0
+
+- Fixed README.md not displaying images correctly on plugin Overview page.
+- Set v1.0.0 as release candidate.
 
 ## 0.6.8
 
