@@ -1,5 +1,17 @@
 # Changelog ![](https://git.operato.eu/open-source/operato-windrose-panel/-/raw/v1.0.0/src/img/operato-windrose-logo-small.svg)
 
+## 1.1.0
+
+- Added Legend anchor options: top, center, bottom
+- Added Legend position options: left, right
+- Added option to calculate bucket size automaticaly.
+- Implemented automatic bucket size calculation.
+- Updated README.md.
+- Added error handling on empty data.
+- Added limits to setting values.
+- Added v1.1.0 to builds.
+- Set v1.1.0 as release candidate.
+
 ## 1.0.0
 
 - Fixed README.md not displaying images correctly on plugin Overview page.

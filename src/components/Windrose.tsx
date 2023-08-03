@@ -5,6 +5,7 @@ import { Svg } from './Svg'
 import { PetalBucket, Vector2, WindroseData, WindroseProps } from 'types';
 import { constructCakeSlice, createPetalLine } from 'utils/svgUtils';
 import { onMouseEnterPolygon, onMouseLeavePolygon } from 'utils/stylesUtils';
+import { roundWindBracketLabel } from 'utils/labelUtils';
 
 function createCircleScale(data: WindroseData, radius: number, center: Vector2, percentLabelAngle: number) {
   // Create rings
@@ -82,7 +83,7 @@ function determinePercentLabelAngle(angleDiff: number, petalBuckets: PetalBucket
   return angleDiff * (minIndex-1) + angleDiff / 2 - 90 * deg2rad;
 }
 
-export const Windrose = ({ data, width, height, center, radius, bucketsCount, styles, changeStyle, tooltipDecimalPlaces, directionLabels, directionLinesCount, windSpeedUnit }: WindroseProps) => {
+export const Windrose = ({ data, width, height, center, radius, bucketsCount, styles, changeStyle, tooltipDecimalPlaces, directionLabels, directionLinesCount, windSpeedUnit, legendPosition }: WindroseProps) => {
 
   let petalNumber = bucketsCount;
 
@@ -128,13 +129,14 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
       prevBucketSize = endRadius;
 
       let polypointString = constructCakeSlice(centerAngle, angleDiff - oneDegreeInRad, center, startRadius - .05, endRadius + .05);
+      if(styles.length <= speedBucket.index) { return; }
       let bucketStyle = styles[speedBucket.index];
 
       let rangeTooltip;
       if(index === petalBucket.speedBuckets.length-1){
-        rangeTooltip = <div>Range: &gt; {speedBucketLowerBound} {windSpeedUnit}</div>;
+        rangeTooltip = <div>Range: &gt; {roundWindBracketLabel(speedBucketLowerBound)} {windSpeedUnit}</div>;
       } else {
-        rangeTooltip = <div>Range: {speedBucketLowerBound}-{speedBucket.speedUpperBound} {windSpeedUnit}</div>;
+        rangeTooltip = <div>Range: {roundWindBracketLabel(speedBucketLowerBound)}-{roundWindBracketLabel(speedBucket.speedUpperBound)} {windSpeedUnit}</div>;
       }
 
       let tooltipContent = <div>

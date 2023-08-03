@@ -3,7 +3,7 @@ import { PanelProps } from '@grafana/data';
 import { DirectionLabel, SpeedBucketStyle, WindroseOptions } from 'types';
 import { Windrose } from './Windrose';
 import { createColorMap, highlightColor } from '../utils/colorUtils'
-import { calculateWindroseData, extractData } from 'utils/dataUtils';
+import { calculateWindroseData, extractData, getUpperSpeedLimit } from 'utils/dataUtils';
 import { WindroseLegend } from './WindroseLegend';
 import { getWindSpeedUnitLabel } from 'utils/labelUtils';
 
@@ -64,24 +64,37 @@ function createDefaultStyles(colorPaleteId: string, speedBucketsCount: number) {
 export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, width, height }) => {
   let [colorPaleteId, _] = useState(options.colorPalette);
 
-  let constructingSpeedBucketStyles = createDefaultStyles(colorPaleteId, options.speedBucketsCount);
+  let speedBucketsCount = options.speedBucketsCount || 8;
+  let petalsPer90Deg = options.petalsPer90Deg || 4;
+
+  let constructingSpeedBucketStyles = createDefaultStyles(colorPaleteId, speedBucketsCount);
   const [bucketStyles, setBucketStyles] = useState(constructingSpeedBucketStyles);
 
   useEffect(() => {
-    let constructingSpeedBucketStyles = createDefaultStyles(options.colorPalette, options.speedBucketsCount);
-    setBucketStyles(constructingSpeedBucketStyles);
-  }, [options.colorPalette, options.speedBucketsCount]);
+    let constructingSpeedBucketStyles = createDefaultStyles(options.colorPalette, speedBucketsCount);
+    setBucketStyles(constructingSpeedBucketStyles);    
+  }, [options.colorPalette, speedBucketsCount]);
 
-  let windData = calculateWindroseData(extractData(data), options.petalsPer90Deg, options.speedBucketsCount, options.speedBucketsSize)
+  const extractedData = extractData(data);
+
+  let calculatedBucketsSize = options.speedBucketsSize || 2;
+  if(options.speedBucketsSizeAuto) {
+    let limit = getUpperSpeedLimit(extractedData.speed);
+    calculatedBucketsSize = limit/speedBucketsCount;
+  }
+  const finalBucketsSize = calculatedBucketsSize;
+
+  let windData = calculateWindroseData(extractedData, petalsPer90Deg, speedBucketsCount, finalBucketsSize)
 
   let padding = 32;
 
   let legendOffset = !options.doesLegendOverlay && options.showLegend ? 150 : 0;
   const windroseRadius = Math.min(height, width - legendOffset) / 2 - padding;
-  const windroseCenter = { x: windroseRadius + padding, y: height / 2 }
+  const windrosePositionX = windroseRadius + padding + (options.legendPosition === 'left' ? legendOffset : 0);
+  const windroseCenter = { x: windrosePositionX, y: height / 2 }
 
   let directionLabels: DirectionLabel[] = [];
-  let directionLinesCount = Math.max(0, options.petalsPer90Deg)
+  let directionLinesCount = Math.max(0, petalsPer90Deg)
 
   if (options.windroseLabels === "compass") {
     const cardinalLabelStyle = { css: { font: "bold 20px sans-serif", fill: "white" }, radiusOffset: 16 }
@@ -115,7 +128,7 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
     }
   } else if (options.windroseLabels === "degree") {
     const degreeLableStyle = { css: { font: "normal 12px sans-serif", fill: "white" }, radiusOffset: 16 }
-    let totalPetals = options.petalsPer90Deg * 4;
+    let totalPetals = petalsPer90Deg * 4;
     let angleDiff = 360 / totalPetals;
     for (let i = 0; i < totalPetals; i++) {
       let angle = angleDiff * i;
@@ -124,15 +137,18 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
   }
 
   let windSpeedUnit = getWindSpeedUnitLabel(options.windSpeedUnit);
-  let windroseLegend = <WindroseLegend bucketsSize={options.speedBucketsSize} bucketStyles={bucketStyles} changeStyle={setBucketStyles} windSpeedUnit={windSpeedUnit} />
+  let windroseLegend = <WindroseLegend bucketsSize={finalBucketsSize} bucketStyles={bucketStyles} changeStyle={setBucketStyles} windSpeedUnit={windSpeedUnit} anchor={options.legendAnchor} position={options.legendPosition} />
+
+  let tooltipDecimalPlaces = options.tooltipDecimalPlaces;
+  if(tooltipDecimalPlaces == null) { tooltipDecimalPlaces = 1; }
 
   return (
     <div>
       <Windrose
         width={width} height={height} radius={windroseRadius} center={windroseCenter}
-        data={windData} bucketsCount={options.petalsPer90Deg} directionLabels={directionLabels}
-        styles={bucketStyles} changeStyle={setBucketStyles} tooltipDecimalPlaces={options.tooltipDecimalPlaces}
-        directionLinesCount={directionLinesCount} windSpeedUnit={windSpeedUnit} />
+        data={windData} bucketsCount={petalsPer90Deg} directionLabels={directionLabels}
+        styles={bucketStyles} changeStyle={setBucketStyles} tooltipDecimalPlaces={tooltipDecimalPlaces}
+        directionLinesCount={directionLinesCount} windSpeedUnit={windSpeedUnit} legendPosition={options.legendPosition} />
       {options.showLegend && windroseLegend}
     </div>
 

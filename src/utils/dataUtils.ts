@@ -2,6 +2,9 @@ import { PanelData } from "@grafana/data";
 import { PetalBucket, SpeedBucket, WindData, WindroseData } from "types";
 
 export function extractData(data: PanelData) {
+    if(data.series.length === 0) {
+        return { direction: [], speed: [] }
+    }
     let weatherData = data.series[0];
 
     let speed: number[] = [];
@@ -20,6 +23,12 @@ export function extractData(data: PanelData) {
         speed: speed
     }
     return windDataFrame;
+}
+
+export function getUpperSpeedLimit(speedData: number[]) {
+    if(speedData.length === 0) { return 0; }
+    const max = speedData.reduce((a: number, b: number) => Math.max(a, b));
+    return max;
 }
 
 export function sortToPetalBuckets(speedBucketSize: number, speedBucketCount: number, speedData: number[]): SpeedBucket[] {
