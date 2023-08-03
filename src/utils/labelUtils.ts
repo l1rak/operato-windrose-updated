@@ -9,3 +9,7 @@ export function getWindSpeedUnitLabel(menuOption: string) {
         default: return "N/A";
     }
 }
+
+export function roundWindBracketLabel(speed: number) {
+    return Math.round(speed*100)/100
+}

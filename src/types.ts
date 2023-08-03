@@ -11,11 +11,14 @@ export interface WindroseOptions {
   petalsPer90Deg: number;
   overwriteSpeedBucketBounds: boolean;
   speedBucketsCount: number;
+  speedBucketsSizeAuto: boolean;
   speedBucketsSize: number;
   windroseLabels: string;
   cardinalLabels: string;
   showLegend: boolean;
   doesLegendOverlay: boolean;
+  legendPosition: string;
+  legendAnchor: string;
   windSpeedUnit: string;
   colorPalette: string;
 }
@@ -103,6 +106,7 @@ export type WindroseProps = {
   tooltipDecimalPlaces: number;
   directionLabels: DirectionLabel[];
   windSpeedUnit: string;
+  legendPosition: string;
 };
 
 export type WindroseLegendProps = {
@@ -110,4 +114,6 @@ export type WindroseLegendProps = {
   bucketStyles: SpeedBucketStyle[];  
   changeStyle: React.Dispatch<React.SetStateAction<SpeedBucketStyle[]>>;
   windSpeedUnit: string;
+  anchor: string;
+  position: string;
 }

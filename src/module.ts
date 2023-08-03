@@ -46,25 +46,45 @@ export const plugin = new PanelPlugin<WindroseOptions>(WindrosePanel).setPanelOp
       path: 'petalsPer90Deg',
       name: 'Petals per 90 degree',
       description: 'How many petals should be per 90 degree. Total petals will be 4 times as many.',
-      defaultValue: 4
+      defaultValue: 4,       
+      settings: {
+        min: 1
+      }
     })
     .addNumberInput({
       path: 'speedBucketsCount',
       name: 'Buckets per each petal.',
       description: 'How many bucket should be per every direction bucket.',
-      defaultValue: 8
+      defaultValue: 8,
+      settings: {
+        integer: true,
+        min: 1
+      }
+    })
+    .addBooleanSwitch({
+      path: 'speedBucketsSizeAuto',
+      name: 'Auto-size speed buckets.',
+      description: 'Automaticaly calculates the size of each speed bucket.',
+      defaultValue: true
     })
     .addNumberInput({
       path: 'speedBucketsSize',
       name: 'Speed bucket size.',
-      description: 'Sets the size of each speed bucket (in m/s).',
-      defaultValue: 2
+      description: 'Sets the size of each speed bucket.',
+      defaultValue: 2,
+      settings: {
+        min: 0.01
+      },
+      showIf: (config) => !config.speedBucketsSizeAuto
     })
     .addNumberInput({
       path: 'tooltipDecimalPlaces',
       name: 'Tooltip decimal places.',
       description: 'How many decimal places should be displayed in tooltip.',
-      defaultValue: 1
+      defaultValue: 1,
+      settings: {
+        min: 0
+      }
     })
     .addSelect({
       path: 'windSpeedUnit',
@@ -144,6 +164,48 @@ export const plugin = new PanelPlugin<WindroseOptions>(WindrosePanel).setPanelOp
       path: 'doesLegendOverlay',
       name: 'Does Legend Overlap',
       defaultValue: false,
+      showIf: (config) => config.showLegend
+    })
+    .addSelect({
+      path: 'legendPosition',
+      name: 'Legend position',
+      description: 'Should Legend be displayed on the left or right of the Windrose',
+      defaultValue: 'right',
+      settings: {
+        options: [
+          {
+            value: 'left',
+            label: 'Left',
+          },
+          {
+            value: 'right',
+            label: 'Right',
+          }
+        ],
+      },
+      showIf: (config) => config.showLegend
+    })
+    .addSelect({
+      path: 'legendAnchor',
+      name: 'Legend anchor point',
+      description: 'Where to anchor the Legend.', 
+      defaultValue: 'bottom',
+      settings: {
+        options: [
+          {
+            value: 'top',
+            label: 'Top',
+          },
+          {
+            value: 'center',
+            label: 'Center',
+          },
+          {
+            value: 'bottom',
+            label: 'Bottom',
+          }
+        ],
+      },
       showIf: (config) => config.showLegend
     })
     ;

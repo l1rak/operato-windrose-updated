@@ -1,9 +1,10 @@
 import React from 'react';
 import { WindroseLegendProps } from 'types';
+import { roundWindBracketLabel } from 'utils/labelUtils';
 import { onMouseEnterDiv, onMouseLeaveDiv } from 'utils/stylesUtils';
 
 
-export const WindroseLegend = ({ bucketsSize, bucketStyles, changeStyle, windSpeedUnit }: WindroseLegendProps) => {
+export const WindroseLegend = ({ bucketsSize, bucketStyles, changeStyle, windSpeedUnit, anchor, position }: WindroseLegendProps) => {
 
     let legendItems: Array<React.ReactElement<any>> = []
 
@@ -23,17 +24,45 @@ export const WindroseLegend = ({ bucketsSize, bucketStyles, changeStyle, windSpe
         }} 
         onMouseEnter={(event)=>{onMouseEnterDiv(event, changeStyle, i)}} onMouseLeave={(event)=>{onMouseLeaveDiv(event, changeStyle, i)}} 
         />
-        let speedLabel = bucketStart + " - " + (bucketStart + bucketsSize);
-        if(bucketStyles.length-1 === i) {speedLabel = " > "+bucketStart;}
+        let speedLabel = roundWindBracketLabel(bucketStart) + " - " + roundWindBracketLabel(bucketStart + bucketsSize);
+        if(bucketStyles.length-1 === i) {speedLabel = " > "+roundWindBracketLabel(bucketStart);}
         bucketStart += bucketsSize;
         legendItems.push(<div style={{ display: 'flex' }}>{icon} {speedLabel}</div>)
+    }
+
+
+    let positionStyle = {};
+    if(position === "right"){
+        positionStyle = {
+            right: "8px"
+        }
+    }else {
+        positionStyle = {
+            left: "8px"
+        }
+    }
+
+    let anchorStyle = {};
+    if(anchor === "top"){
+        positionStyle = {
+            top: "8px",
+        }
+    }else if(anchor === "center"){
+        anchorStyle = {
+            top: "50%",
+            transform: "translate(0%, -50%)",
+        }
+    }else {
+        anchorStyle = {
+            bottom: "8px",
+        }
     }
 
     return (
         <div style={{
             position: "absolute",
-            bottom: "8px",
-            right: "8px",
+            ...positionStyle,
+            ...anchorStyle,
             width: "150px",
             border: "4px solid #4b4c50",
             borderRadius: "16px",
