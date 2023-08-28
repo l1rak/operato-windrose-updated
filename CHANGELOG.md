@@ -2,6 +2,10 @@
 
 ## 1.1.0
 
+- Fixed v1.1.0 not being signed with a comunity level.
+
+## 1.1.0
+
 - Added Legend anchor options: top, center, bottom
 - Added Legend position options: left, right
 - Added option to calculate bucket size automaticaly.
