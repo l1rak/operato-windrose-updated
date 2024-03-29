@@ -1,14 +1,11 @@
 # Changelog ![](https://git.operato.eu/open-source/operato-windrose-panel/-/raw/v1.0.0/src/img/operato-windrose-logo-small.svg)
 
-## 1.2.0-rc2
-
-- Fixed legend anchor bug.
-
-## 1.2.0-rc1
+## 1.2.0
 
 - Fixed wrong wind direction labels.
+- Fixed highlighting not tunring off on hover.
 
-## 1.1.0
+## 1.1.1
 
 - Fixed v1.1.0 not being signed with a comunity level.
 
