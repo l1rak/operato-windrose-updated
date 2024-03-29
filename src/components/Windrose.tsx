@@ -148,7 +148,7 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
       petalBuckets.push(
         <Tooltip content={tooltipContent}>
           <polygon className={speedBucket.index.toString()}
-            onMouseEnter={(event) => { onMouseEnterPolygon(event, changeStyle, speedBucket.index) }} onMouseLeave={(event) => { onMouseLeavePolygon(event, changeStyle, speedBucket.index) }}
+            onMouseEnter={(event) => { onMouseEnterPolygon(event, changeStyle, speedBucket.index) }} onMouseOut={(event) => { onMouseLeavePolygon(event, changeStyle, speedBucket.index) }}
             points={polypointString}
             fill={bucketStyle.currentBucketStyle.color} fillOpacity={bucketStyle.currentBucketStyle.opacity}
             stroke={bucketStyle.bucketsStrokeStyle.stroke} strokeWidth={bucketStyle.bucketsStrokeStyle.strokeWidth} />
