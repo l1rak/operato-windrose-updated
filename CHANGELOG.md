@@ -1,5 +1,9 @@
 # Changelog ![](https://git.operato.eu/open-source/operato-windrose-panel/-/raw/v1.0.0/src/img/operato-windrose-logo-small.svg)
 
+## 1.2.0-rc1
+
+- Fixed wrong wind direction labels.
+
 ## 1.1.0
 
 - Fixed v1.1.0 not being signed with a comunity level.
