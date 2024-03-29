@@ -44,7 +44,7 @@ export const WindroseLegend = ({ bucketsSize, bucketStyles, changeStyle, windSpe
 
     let anchorStyle = {};
     if(anchor === "top"){
-        positionStyle = {
+        anchorStyle = {
             top: "8px",
         }
     }else if(anchor === "center"){

@@ -120,7 +120,7 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
       directionLabels.push({ angle: 67.5, text: "ENE", style: intermediateLabelStyle });
       directionLabels.push({ angle: 112.5, text: "ESE", style: intermediateLabelStyle });
       directionLabels.push({ angle: 157.5, text: "SSE", style: intermediateLabelStyle });
-      directionLabels.push({ angle: 202.5, text: "SSE", style: intermediateLabelStyle });
+      directionLabels.push({ angle: 202.5, text: "SSW", style: intermediateLabelStyle });
       directionLabels.push({ angle: 247.5, text: "WSW", style: intermediateLabelStyle });
       directionLabels.push({ angle: 292.5, text: "WNW", style: intermediateLabelStyle });
       directionLabels.push({ angle: 337.5, text: "NNW", style: intermediateLabelStyle });
