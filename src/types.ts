@@ -21,6 +21,10 @@ export interface WindroseOptions {
   legendAnchor: string;
   windSpeedUnit: string;
   colorPalette: string;
+// New properties for font sizes
+windDirectionLabelFontSize: number; // Added for wind direction labels
+percentageLabelFontSize: number; // Added for percentage labels on circles
+legendTextFontSize: number; // Added for legend text
 }
 
 export interface SpeedBucketStyleValues {
@@ -32,6 +36,12 @@ export interface SpeedBucketStrokeValues {
   strokeWidth: number;
 }
 
+// New interface for font size options
+export interface FontSizeOptions {
+  windDirectionLabelFontSize: number;
+  percentageLabelFontSize: number;
+  legendTextFontSize: number;
+}
 export interface SpeedBucketStyle {
   idleBucketStyle: SpeedBucketStyleValues;
   selectedBucketStyle: SpeedBucketStyleValues;
@@ -107,6 +117,10 @@ export type WindroseProps = {
   directionLabels: DirectionLabel[];
   windSpeedUnit: string;
   legendPosition: string;
+ // New properties for font sizes
+ windDirectionLabelFontSize: number; // Added for wind direction labels
+ percentageLabelFontSize: number; // Added for percentage labels on circles
+ legendTextFontSize: number; // Added for legend text
 };
 
 export type WindroseLegendProps = {
@@ -116,4 +130,6 @@ export type WindroseLegendProps = {
   windSpeedUnit: string;
   anchor: string;
   position: string;
-}
+    // New property for legend text font size
+  legendTextFontSize: number; // Added for legend text
+  }

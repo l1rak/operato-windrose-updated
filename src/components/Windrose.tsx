@@ -7,7 +7,7 @@ import { constructCakeSlice, createPetalLine } from 'utils/svgUtils';
 import { onMouseEnterPolygon, onMouseLeavePolygon } from 'utils/stylesUtils';
 import { roundWindBracketLabel } from 'utils/labelUtils';
 
-function createCircleScale(data: WindroseData, radius: number, center: Vector2, percentLabelAngle: number) {
+function createCircleScale(data: WindroseData, radius: number, center: Vector2, percentLabelAngle: number, percentageLabelFontSize: number) {
   // Create rings
   let circlesRings: JSX.Element[] = [];
   let topCirclesRings: JSX.Element[] = [];
@@ -36,8 +36,9 @@ function createCircleScale(data: WindroseData, radius: number, center: Vector2, 
   let sin = Math.sin(percentLabelAngle);
   let cos = Math.cos(percentLabelAngle);
 
-  let fontSize = 15*radius/minimumSubringRadius;
-  let adjustedFontSize = Math.min(15, fontSize);
+ //introduced percentageLabelFontSize parameter in the createCircleScale and Windrose functions. Adjusted the font size calculation for percentage labels using the new parameter.
+  let fontSize = percentageLabelFontSize * radius / minimumSubringRadius;
+  let adjustedFontSize = Math.min(percentageLabelFontSize, fontSize);
   let labelFont = `normal ${adjustedFontSize}px sans-serif`;
   for (let i = 1; i < ringsCount; i++) {
     let centerDistance = radius * (i / ringsCount * .9 + .1);
@@ -83,7 +84,8 @@ function determinePercentLabelAngle(angleDiff: number, petalBuckets: PetalBucket
   return angleDiff * (minIndex-1) + angleDiff / 2 - 90 * deg2rad;
 }
 
-export const Windrose = ({ data, width, height, center, radius, bucketsCount, styles, changeStyle, tooltipDecimalPlaces, directionLabels, directionLinesCount, windSpeedUnit, legendPosition }: WindroseProps) => {
+// Included windDirectionLabelFontSize, percentageLabelFontSize, and legendTextFontSize in the Windrose props.
+export const Windrose = ({ data, width, height, center, radius, bucketsCount, styles, changeStyle, tooltipDecimalPlaces, directionLabels, directionLinesCount, windSpeedUnit, legendPosition, windDirectionLabelFontSize, percentageLabelFontSize, legendTextFontSize, }: WindroseProps) => {
 
   let petalNumber = bucketsCount;
 
@@ -164,22 +166,34 @@ export const Windrose = ({ data, width, height, center, radius, bucketsCount, st
     });
   }
 
-
   let cardinalLabels: JSX.Element[] = [];
   for (let i = 0; i < directionLabels.length; i++) {
-    let label = directionLabels[i];
-    let angle = (label.angle - 90) * deg2rad;
-    let cardinalOffset = radius + label.style.radiusOffset;
-    let x = center.x + Math.cos(angle) * cardinalOffset
-    let y = center.y + Math.sin(angle) * cardinalOffset
-    cardinalLabels.push(
-      <text x={x} y={y} style={label.style.css} dominantBaseline="middle" textAnchor="middle">
-        {label.text}</text>);
-  }
+  let label = directionLabels[i];
+  let angle = (label.angle - 90) * deg2rad;
+  let cardinalOffset = radius + label.style.radiusOffset;
+  let x = center.x + Math.cos(angle) * cardinalOffset;
+  let y = center.y + Math.sin(angle) * cardinalOffset;
+  
+//  Updated the cardinal (direction) labels to use the provided font size parameters.
+  cardinalLabels.push(
+    <text
+      x={x}
+      y={y}
+      style={{
+        ...label.style.css,
+      }}
+      dominantBaseline="middle"
+      textAnchor="middle"
+    >
+      {label.text}
+    </text>
+  );
+}
 
+  // Modified the call to createCircleScale to pass the new percentageLabelFontSize parameter.
   let percentLabelAngle = determinePercentLabelAngle(angleDiff, data.petalBuckets, bucketsCount);
-  let [circlesRings, topCirclesRings, percentLabels] = createCircleScale(data, radius, center, percentLabelAngle);
-
+  let [circlesRings, topCirclesRings, percentLabels] = createCircleScale(data, radius, center, percentLabelAngle, percentageLabelFontSize);
+  
   return (
     <div>
       <div>

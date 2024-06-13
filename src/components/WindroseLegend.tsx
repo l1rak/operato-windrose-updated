@@ -3,9 +3,7 @@ import { WindroseLegendProps } from 'types';
 import { roundWindBracketLabel } from 'utils/labelUtils';
 import { onMouseEnterDiv, onMouseLeaveDiv } from 'utils/stylesUtils';
 
-
-export const WindroseLegend = ({ bucketsSize, bucketStyles, changeStyle, windSpeedUnit, anchor, position }: WindroseLegendProps) => {
-
+export const WindroseLegend = ({ bucketsSize, bucketStyles, changeStyle, windSpeedUnit, anchor, position, legendTextFontSize }: WindroseLegendProps) => {
     let legendItems: Array<React.ReactElement<any>> = []
 
     let bucketStart = 0;
@@ -16,43 +14,42 @@ export const WindroseLegend = ({ bucketsSize, bucketStyles, changeStyle, windSpe
             height: "10px",
             background: bucketStyles[i].currentBucketStyle.color,
             opacity: bucketStyles[i].currentBucketStyle.opacity,
-            outline: bucketStyles[i].currentStrokeStyle.strokeWidth+"px solid "+bucketStyles[i].currentStrokeStyle.stroke,
+            outline: bucketStyles[i].currentStrokeStyle.strokeWidth + "px solid " + bucketStyles[i].currentStrokeStyle.stroke,
             borderRadius: "4px",
             margin: "auto",
             marginRight: "6px",
             marginLeft: "0"
-        }} 
-        onMouseEnter={(event)=>{onMouseEnterDiv(event, changeStyle, i)}} onMouseLeave={(event)=>{onMouseLeaveDiv(event, changeStyle, i)}} 
+        }}
+            onMouseEnter={(event) => { onMouseEnterDiv(event, changeStyle, i) }} onMouseLeave={(event) => { onMouseLeaveDiv(event, changeStyle, i) }}
         />
         let speedLabel = roundWindBracketLabel(bucketStart) + " - " + roundWindBracketLabel(bucketStart + bucketsSize);
-        if(bucketStyles.length-1 === i) {speedLabel = " > "+roundWindBracketLabel(bucketStart);}
+        if (bucketStyles.length - 1 === i) { speedLabel = " > " + roundWindBracketLabel(bucketStart); }
         bucketStart += bucketsSize;
         legendItems.push(<div style={{ display: 'flex' }}>{icon} {speedLabel}</div>)
     }
 
-
     let positionStyle = {};
-    if(position === "right"){
+    if (position === "right") {
         positionStyle = {
             right: "8px"
         }
-    }else {
+    } else {
         positionStyle = {
             left: "8px"
         }
     }
 
     let anchorStyle = {};
-    if(anchor === "top"){
+    if (anchor === "top") {
         anchorStyle = {
             top: "8px",
         }
-    }else if(anchor === "center"){
+    } else if (anchor === "center") {
         anchorStyle = {
             top: "50%",
             transform: "translate(0%, -50%)",
         }
-    }else {
+    } else {
         anchorStyle = {
             bottom: "8px",
         }
@@ -67,18 +64,17 @@ export const WindroseLegend = ({ bucketsSize, bucketStyles, changeStyle, windSpe
             border: "4px solid #4b4c50",
             borderRadius: "16px",
             padding: "8px",
-
-            // DATK THEME
-            //background: "#4b4c50",
-            //color: "white",
+            // Added fontSize from legendTextFontSize prop
+            fontSize: legendTextFontSize,
             background: "#f2f2f2",
             color: "black",
         }}>
             <div style={{
-                justifyContent: 'center'
+                justifyContent: 'center',
+                // Added fontSize from legendTextFontSize prop
+                fontSize: legendTextFontSize
             }}><b>Wind speed ({windSpeedUnit})</b></div>
             {legendItems}
         </div>
-
     );
 };

@@ -66,7 +66,7 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
 
   let speedBucketsCount = options.speedBucketsCount || 8;
   let petalsPer90Deg = options.petalsPer90Deg || 4;
-
+  
   let constructingSpeedBucketStyles = createDefaultStyles(colorPaleteId, speedBucketsCount);
   const [bucketStyles, setBucketStyles] = useState(constructingSpeedBucketStyles);
 
@@ -137,19 +137,33 @@ export const WindrosePanel: React.FC<WindrosePanelProps> = ({ options, data, wid
   }
 
   let windSpeedUnit = getWindSpeedUnitLabel(options.windSpeedUnit);
-  let windroseLegend = <WindroseLegend bucketsSize={finalBucketsSize} bucketStyles={bucketStyles} changeStyle={setBucketStyles} windSpeedUnit={windSpeedUnit} anchor={options.legendAnchor} position={options.legendPosition} />
+//  let windroseLegend = <WindroseLegend bucketsSize={finalBucketsSize} bucketStyles={bucketStyles} changeStyle={setBucketStyles} windSpeedUnit={windSpeedUnit} anchor={options.legendAnchor} position={options.legendPosition} legendTextFontSize={options.legendTextFontSize} />
 
   let tooltipDecimalPlaces = options.tooltipDecimalPlaces;
   if(tooltipDecimalPlaces == null) { tooltipDecimalPlaces = 1; }
 
+
   return (
+    // windDirectionLabelFontSize: Passed as a prop to <Windrose> component.
+    // percentageLabelFontSize: Passed as a prop to <Windrose> component.
+    // legendTextFontSize: Passed as a prop to both <Windrose> and <WindroseLegend> components.
     <div>
       <Windrose
         width={width} height={height} radius={windroseRadius} center={windroseCenter}
         data={windData} bucketsCount={petalsPer90Deg} directionLabels={directionLabels}
         styles={bucketStyles} changeStyle={setBucketStyles} tooltipDecimalPlaces={tooltipDecimalPlaces}
-        directionLinesCount={directionLinesCount} windSpeedUnit={windSpeedUnit} legendPosition={options.legendPosition} />
-      {options.showLegend && windroseLegend}
+        directionLinesCount={directionLinesCount} windSpeedUnit={windSpeedUnit} windDirectionLabelFontSize={options.windDirectionLabelFontSize} percentageLabelFontSize={options.percentageLabelFontSize} legendTextFontSize={options.legendTextFontSize} legendPosition={options.legendPosition} />
+      {options.showLegend && (
+        <WindroseLegend
+        bucketsSize={finalBucketsSize}
+        bucketStyles={bucketStyles}
+        changeStyle={setBucketStyles}
+        windSpeedUnit={windSpeedUnit}
+        anchor={options.legendAnchor}
+        position={options.legendPosition}
+        legendTextFontSize={options.legendTextFontSize}
+      />
+      )}
     </div>
 
   );

@@ -208,5 +208,32 @@ export const plugin = new PanelPlugin<WindroseOptions>(WindrosePanel).setPanelOp
       },
       showIf: (config) => config.showLegend
     })
-    ;
+    // add config options for fonts
+    .addNumberInput({
+      path: 'windDirectionLabelFontSize',
+      name: 'Wind direction label font size',
+      description: 'Font size for wind direction labels',
+      defaultValue: 12,
+      settings: {
+        min: 1,
+      },
+    })
+    .addNumberInput({
+      path: 'percentageLabelFontSize',
+      name: 'Percentage label font size',
+      description: 'Font size for percentage labels on circles',
+      defaultValue: 10,
+      settings: {
+        min: 1,
+      },
+    })
+    .addNumberInput({
+      path: 'legendTextFontSize',
+      name: 'Legend text font size',
+      description: 'Font size for legend text',
+      defaultValue: 14,
+      settings: {
+        min: 1,
+      },
+    });
 });
